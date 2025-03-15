@@ -1,0 +1,48 @@
+.check-in-card {
+  max-width: 600px;
+  margin: 30px auto;
+  padding: 20px;
+}
+
+.check-in-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.passport-upload {
+  margin-top: 10px;
+}
+
+.room-details {
+  margin-top: 20px;
+  font-weight: bold;
+}
+
+button {
+  margin-top: 20px;
+}
+
+.file-name {
+  margin-left: 16px;
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.6); // Subtle gray
+  word-break: break-word;
+}
+
+.passport-upload {
+  display: flex;
+  align-items: center;
+  gap: 16px; // Space between the input and button
+}
+
+.upload-button {
+  margin-left: 8px;
+}
+
+.delete-button {
+  margin-left: auto;
+}

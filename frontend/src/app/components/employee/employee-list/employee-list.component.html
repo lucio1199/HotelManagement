@@ -1,0 +1,53 @@
+<div class="button-container">
+  <button mat-raised-button color="primary" routerLink="create" aria-label="New Employee">
+    <mat-icon class="mat-icon" fontIcon="add"></mat-icon>
+    New Employee
+  </button>
+</div>
+
+<div *ngIf="successMessage" class="alert alert-success">
+  {{ successMessage }}
+</div>
+
+<mat-card>
+  <table mat-table [dataSource]="employees" class="mat-elevation-z8">
+
+    <!-- First Name Column -->
+    <ng-container matColumnDef="firstName">
+      <th mat-header-cell *matHeaderCellDef> First Name </th>
+      <td mat-cell *matCellDef="let employee"> {{ employee.firstName }} </td>
+    </ng-container>
+
+    <!-- Last Name Column -->
+    <ng-container matColumnDef="lastName">
+      <th mat-header-cell *matHeaderCellDef> Last Name </th>
+      <td mat-cell *matCellDef="let employee"> {{ employee.lastName }} </td>
+    </ng-container>
+
+    <!-- Phone Number Column -->
+    <ng-container matColumnDef="phoneNumber">
+      <th mat-header-cell *matHeaderCellDef> Phone Number </th>
+      <td mat-cell *matCellDef="let employee"> {{ employee.phoneNumber }} </td>
+    </ng-container>
+
+    <!-- Actions Column -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> Actions </th>
+      <td mat-cell *matCellDef="let employee">
+        <button mat-raised-button color="primary" [routerLink]="['/employees/edit', employee.id]" class="action-button">Edit</button>
+        <button mat-raised-button color="warn" *ngIf=employeeIsNotAdmin(employee) (click)="confirmDelete(employee)" class="action-button">Delete</button>
+      </td>
+    </ng-container>
+
+    <!-- Role Type Column -->
+    <ng-container matColumnDef="roleType">
+      <th mat-header-cell *matHeaderCellDef> Role Type </th>
+      <td mat-cell *matCellDef="let employee"> {{ employee.roleType }} </td>
+    </ng-container>
+
+    <!-- Header and Row Declarations -->
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+    <tr mat-row *matRowDef="let row; columns: columnsToDisplay"></tr>
+  </table>
+</mat-card>
+

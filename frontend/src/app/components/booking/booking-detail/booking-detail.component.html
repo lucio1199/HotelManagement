@@ -1,0 +1,171 @@
+<h1>My Bookings</h1>
+
+<div class="button-container">
+  <button mat-raised-button color="primary" routerLink="/" aria-label="New booking">
+    <mat-icon class="mat-icon" fontIcon="add"></mat-icon>
+    New booking
+  </button>
+</div>
+<div class="content-wrapper">
+<mat-card>
+  <h2>Room Bookings</h2>
+  <table mat-table [dataSource]="bookings">
+    <!-- Booking Number Column -->
+    <ng-container matColumnDef="bookingNumber">
+      <th mat-header-cell *matHeaderCellDef>Booking Number</th>
+      <td mat-cell *matCellDef="let booking">{{ booking.bookingNumber }}</td>
+    </ng-container>
+
+    <!-- Room Name Column -->a
+    <ng-container matColumnDef="roomName">
+      <th mat-header-cell *matHeaderCellDef>Room Name</th>
+      <td mat-cell *matCellDef="let booking">{{ booking.roomName }}</td>
+    </ng-container>
+
+    <!-- Booking Date Column -->
+    <ng-container matColumnDef="bookingDate">
+      <th mat-header-cell *matHeaderCellDef>Booking Date</th>
+      <td mat-cell *matCellDef="let booking">{{ booking.bookingDate | date }}</td>
+    </ng-container>
+
+    <!-- Start Date Column -->
+    <ng-container matColumnDef="startDate">
+      <th mat-header-cell *matHeaderCellDef>Start Date</th>
+      <td mat-cell *matCellDef="let booking">{{ booking.startDate | date }}</td>
+    </ng-container>
+
+    <!-- End Date Column -->
+    <ng-container matColumnDef="endDate">
+      <th mat-header-cell *matHeaderCellDef>End Date</th>
+      <td mat-cell *matCellDef="let booking">{{ booking.endDate | date }}</td>
+    </ng-container>
+
+    <!-- Status Column -->
+    <ng-container matColumnDef="bookingStatus">
+      <th mat-header-cell *matHeaderCellDef>Status</th>
+      <td mat-cell *matCellDef="let booking">
+        <span [ngClass]="{'confirmed': booking.status === 'CONFIRMED', 'cancelled': booking.status === 'CANCELLED'}">
+          {{ booking.status }}
+        </span>
+      </td>
+    </ng-container>
+
+    <!-- Actions Column -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let booking">
+        <button *ngIf="(checkedIn(booking) !== null && !checkedIn(booking) && isBookingStarted(booking.startDate, booking.endDate)) && uiConfigService.digitalCheckInIsEnabled()" mat-raised-button color="primary" (click)="checkIn(booking.id)">Go to Check-In</button>
+        <button *ngIf="(checkedIn(booking) !== null && checkedIn(booking) && isBookingStarted(booking.startDate, booking.endDate)) && uiConfigService.digitalCheckInIsEnabled()" mat-raised-button color="primary" (click)="confirmCheckOut(booking)">Check-Out</button>
+        <button *ngIf="(checkedIn(booking) !== null && !checkedIn(booking) && !isBookingStarted(booking.startDate, booking.endDate)) && booking.status !== 'CANCELLED' && booking.status !== 'COMPLETED'" mat-raised-button color="warn" (click)="confirmCancelBooking(booking)">Cancel Booking</button>
+        <div *ngIf="booking.status === 'CANCELLED'" class="cancelled-status">
+          <mat-icon class="cancelled-icon" aria-label="Cancelled">cancel</mat-icon>
+          <span class="cancelled-label">Cancelled</span>
+        </div>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="paidStatus">
+      <th mat-header-cell *matHeaderCellDef> Payment Status </th>
+      <td mat-cell *matCellDef="let booking">
+        <div *ngIf="booking.isPaid" class="paid-status">
+          <mat-icon color="primary" aria-label="Paid">check_circle</mat-icon>
+          <span class="paid-label">Paid</span>
+        </div>
+        <div *ngIf="!booking.isPaid">
+          <button mat-raised-button color="warn" (click)="payNow(booking)" [disabled]="booking.status === 'CANCELLED'"  matTooltip="Pay for this booking">
+            <mat-icon>payment</mat-icon> Pay Now
+          </button>
+        </div>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="pdf">
+      <th mat-header-cell *matHeaderCellDef>Booking Receipts</th>
+      <td mat-cell *matCellDef="let booking">
+        <button class="action-button" mat-raised-button color="primary" (click)="downloadBookingPdf(booking.id, 'BookingConfirmation.pdf')">
+          Confirmation
+        </button>
+        <button class="action-button" mat-raised-button color="primary" (click)="downloadBookingPdf(booking.id, 'Invoice.pdf')">
+          Invoice
+        </button>
+      </td>
+    </ng-container>
+
+
+    <!-- Header and Data Rows -->
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+    <tr mat-row *matRowDef="let row; columns: columnsToDisplay"></tr>
+  </table>
+</mat-card>
+</div>
+<div class="content-wrapper">
+<mat-card *ngIf="activityBookings.length > 0">
+  <h2>Activity Bookings</h2>
+  <table mat-table [dataSource]="activityBookings">
+    <ng-container matColumnDef="activityName">
+      <th mat-header-cell *matHeaderCellDef>Activity Name</th>
+      <td mat-cell *matCellDef="let booking">{{ booking.activityName }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="bookingDate">
+      <th mat-header-cell *matHeaderCellDef>Booking Date</th>
+      <td mat-cell *matCellDef="let booking">{{ booking.bookingDate | date }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="startTime">
+      <th mat-header-cell *matHeaderCellDef> Start Time </th>
+      <td mat-cell *matCellDef="let booking">
+        {{ formatTime(booking.startTime) }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="endTime">
+      <th mat-header-cell *matHeaderCellDef> End Time </th>
+      <td mat-cell *matCellDef="let booking">
+        {{ formatTime(booking.endTime) }}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="date">
+      <th mat-header-cell *matHeaderCellDef>Date</th>
+      <td mat-cell *matCellDef="let booking">{{ booking.date | date }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="participants">
+      <th mat-header-cell *matHeaderCellDef>Participants</th>
+      <td mat-cell *matCellDef="let booking">{{ booking.participants }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="paid">
+      <th mat-header-cell *matHeaderCellDef> Payment Status </th>
+      <td mat-cell *matCellDef="let booking">
+        <mat-icon *ngIf="booking.paid" color="primary" aria-label="Paid">check_circle</mat-icon>
+        <mat-icon *ngIf="!booking.paid" color="warn" aria-label="Unpaid">cancel</mat-icon>
+        <span *ngIf="booking.paid" class="paid-label">Paid</span>
+        <span *ngIf="!booking.paid" class="unpaid-label">Unpaid</span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> Show Activity </th>
+      <td mat-cell *matCellDef="let booking">
+        <button mat-raised-button color="primary" [routerLink]="['/activities/detail', booking.activityId]" aria-label="New booking">
+          Details
+        </button>
+      </td>
+    </ng-container>
+
+
+    <tr mat-header-row *matHeaderRowDef="activityColumnsToDisplay"></tr>
+    <tr mat-row *matRowDef="let row; columns: activityColumnsToDisplay"></tr>
+  </table>
+
+</mat-card>
+  <div class="loading-overlay" *ngIf="isLoading">
+    <div class="loading-text">Loading...</div>
+  </div>
+</div>
+<ng-template #noBookings>
+  <p>No bookings found.</p>
+</ng-template>
+

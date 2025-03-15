@@ -1,0 +1,70 @@
+<div class="button-container">
+  <button mat-raised-button color="primary" routerLink="create" aria-label="New Guest">
+    <mat-icon class="mat-icon" fontIcon="add"></mat-icon>
+    New Guest
+  </button>
+</div>
+
+<div *ngIf="successMessage" class="alert alert-success">
+  {{ successMessage }}
+</div>
+
+<mat-card class="search-bar">
+  <form [formGroup]="searchForm" class="search-from-container" (ngSubmit)="onSubmit()">
+
+    <mat-form-field class="search-bar-element" appearance="outline">
+      <mat-label>First Name</mat-label>
+      <input matInput formControlName="firstName" placeholder="First Name" type="text"/>
+    </mat-form-field>
+
+    <mat-form-field class="search-bar-element" appearance="outline">
+      <mat-label>Last Name</mat-label>
+      <input matInput formControlName="lastName" placeholder="Last Name" type="text"/>
+    </mat-form-field>
+
+    <mat-form-field class="search-bar-element" appearance="outline">
+      <mat-label>E-Mail</mat-label>
+      <input matInput formControlName="email" placeholder="E-Mail" type="text"/>
+    </mat-form-field>
+    <button mat-raised-button class="search-bar-button" color="primary" type="submit" [disabled]="searchForm.invalid">Search</button>
+  </form>
+</mat-card>
+
+<mat-card>
+  <table mat-table [dataSource]="guests" class="mat-elevation-z8">
+
+    <!-- First Name Column -->
+    <ng-container matColumnDef="firstName">
+      <th mat-header-cell *matHeaderCellDef> First Name </th>
+      <td mat-cell *matCellDef="let guest"> {{ guest.firstName }} </td>
+    </ng-container>
+
+    <!-- Last Name Column -->
+    <ng-container matColumnDef="lastName">
+      <th mat-header-cell *matHeaderCellDef> Last Name </th>
+      <td mat-cell *matCellDef="let guest"> {{ guest.lastName }} </td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef> E-Mail </th>
+      <td mat-cell *matCellDef="let guest"> {{ guest.email }} </td>
+    </ng-container>
+
+    <!-- Actions Column -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> Actions </th>
+      <td mat-cell *matCellDef="let guest">
+        <button mat-raised-button color="primary" [routerLink]="['/guests/edit', guest.email]">Edit</button>
+        <button mat-raised-button color="warn" (click)="confirmDelete(guest)">Delete</button>
+      </td>
+    </ng-container>
+
+
+    <!-- Header and Row Declarations -->
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+    <tr mat-row *matRowDef="let row; columns: columnsToDisplay"></tr>
+  </table>
+  <mat-paginator [length]="totalGuests" [pageSize]="pageSize" (page)="onPageChange($event)">
+  </mat-paginator>
+</mat-card>

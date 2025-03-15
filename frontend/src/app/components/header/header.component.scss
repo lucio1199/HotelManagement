@@ -1,0 +1,29 @@
+.horizontal-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Ensures content spreads evenly across the toolbar */
+
+  .home-button {
+    margin-right: 32px; /* Adds spacing between the logo and nav links */
+    font-size: 22px/*Makes the text bigger*/
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 16px; /* Space between each navigation link */
+  }
+
+  .spacer {
+    flex-grow: 1; /* Pushes the menu button to the right */
+  }
+
+  .email-text {
+    font-size: 14px;
+    margin-right: 16px;
+    margin-bottom: 10px;
+    vertical-align: middle;
+    line-height: 36px;
+
+
+  }
+}

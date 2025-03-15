@@ -1,0 +1,48 @@
+<div *ngIf="guests && guests.length > 0; else noGuests">
+  <h3 *ngIf="isManagement" ><strong>Guests staying in the room:</strong></h3>
+  <h3 *ngIf="!isManagement" >Added Guests</h3>
+  <table mat-table [dataSource]="guests" class="mat-elevation-z8">
+    <!-- First Name Column -->
+    <ng-container matColumnDef="firstName">
+      <th mat-header-cell *matHeaderCellDef> First Name </th>
+      <td mat-cell *matCellDef="let guest"> {{ guest.firstName || 'N/A' }} </td>
+    </ng-container>
+
+    <!-- Last Name Column -->
+    <ng-container matColumnDef="lastName">
+      <th mat-header-cell *matHeaderCellDef> Last Name </th>
+      <td mat-cell *matCellDef="let guest"> {{ guest.lastName || 'N/A' }} </td>
+    </ng-container>
+
+    <!-- Email Column -->
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef> Email </th>
+      <td mat-cell *matCellDef="let guest"> {{ guest.email }} </td>
+    </ng-container>
+
+    <!-- Passport Column for Management -->
+    <ng-container matColumnDef="passport" *ngIf="isManagement">
+      <th mat-header-cell *matHeaderCellDef>Passport</th>
+      <td mat-cell *matCellDef="let guest">
+        <button mat-raised-button (click)="showPassport(guest.email)">Open</button>
+      </td>
+    </ng-container>
+    <!-- Action Column for Management -->
+    <ng-container matColumnDef="actions" *ngIf="isManagement">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let guest; let i = index">
+        <button mat-raised-button color="warn" *ngIf="i !== 0" (click)="confirmRemove(guest.email)">Remove</button>
+        <ng-container *ngIf="i === 0">Owner</ng-container>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>
+
+<ng-template #noGuests>
+  <h3 *ngIf="isManagement" ><strong>Guests staying in the room:</strong></h3>
+  <p *ngIf="isManagement" >None</p>
+  <p *ngIf="!isManagement" >No guests added to this room.</p>
+</ng-template>

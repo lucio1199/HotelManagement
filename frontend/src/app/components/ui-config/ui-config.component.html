@@ -1,0 +1,72 @@
+<mat-card class="ui-config-card">
+  <h2>Hotel Configuration</h2>
+
+  <form [formGroup]="uiConfigForm" (ngSubmit)="onSubmit()">
+    <!-- Hotel Name -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Hotel Name:</mat-label>
+      <input matInput formControlName="hotelName" placeholder="Enter hotel name" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Short Description:</mat-label>
+      <textarea matInput formControlName="descriptionShort" placeholder="Enter description"></textarea>
+    </mat-form-field>
+
+    <!-- Hotel Description -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Description:</mat-label>
+      <textarea matInput formControlName="description" placeholder="Enter description"></textarea>
+    </mat-form-field>
+
+    <!-- Address -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Address:</mat-label>
+      <input matInput formControlName="address" placeholder="Enter address" />
+      <mat-error *ngIf="uiConfigForm.get('address')?.hasError('invalidAddress')">
+        Address must be in Austria.
+      </mat-error>
+      <mat-error *ngIf="uiConfigForm.get('address')?.hasError('required')">
+        Address is required.
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Modules Section -->
+    <div class="modules">
+      <label>Modules:</label>
+      <div class="module-options">
+        <mat-checkbox formControlName="roomCleaning" aria-label="Room Cleaning">Room Cleaning</mat-checkbox>
+        <mat-checkbox formControlName="digitalCheckIn" aria-label="Digital Check-In">Digital Check-In/Check-Out</mat-checkbox>
+        <mat-checkbox formControlName="activities" aria-label="Activities">Activities</mat-checkbox>
+        <mat-checkbox formControlName="nuki" aria-label="Nuki">Nuki</mat-checkbox>
+      </div>
+    </div>
+
+    <!-- Image Upload Section -->
+    <div class="image-upload">
+      <label>Images:</label>
+      <!-- Uploaded Images -->
+      <div class="uploaded-images" *ngIf="uploadedImages.length > 0">
+        <div class="image-container" *ngFor="let img of uploadedImages; let i = index">
+          <img [src]="img" alt="Uploaded Image {{i + 1}}" />
+          <button mat-icon-button type="button" (click)="removeUploadedImage(i)" aria-label="Remove Image">
+            <mat-icon color="warn">delete</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <!-- File Input -->
+      <input type="file" (change)="onFileSelected($event)" hidden #fileInput />
+      <button mat-raised-button color="primary" type="button" (click)="fileInput.click()">Add Images</button>
+    </div>
+    <div class="form-actions">
+    <button mat-raised-button color="warn" type="button" (click)="goBack()">
+      Cancel
+    </button>
+    <button mat-raised-button color="primary" type="submit" [disabled]="uiConfigForm.invalid" aria-label="Save Configuration">
+      Save Configuration
+    </button>
+    </div>
+
+  </form>
+</mat-card>

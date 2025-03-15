@@ -1,0 +1,51 @@
+<h2 mat-dialog-title>Booking Details</h2>
+<mat-dialog-content>
+  <p><strong>Firstname:</strong> {{ data.booking.firstName }}</p>
+  <p><strong>Lastname:</strong> {{ data.booking.lastName }}</p>
+  <p><strong>Email:</strong> {{ data.booking.email }}</p>
+  <p><strong>Phone number:</strong> {{ data.booking.phoneNumber }}</p>
+  <p><strong>Room:</strong> {{ data.booking.roomName }}</p>
+  <p><strong>Guests:</strong> {{ data.booking.capacity }}</p>
+  <p><strong>Total Amount:</strong> {{ data.booking.totalAmount | currency:'EUR' }}</p>
+
+  <!-- Guests List -->
+  <app-guest-list *ngIf="data.booking.status === 'ACTIVE' && data.guests"  [guests]="data.guests" [isManagement]="true" [bookingId]="this.data.booking.id"></app-guest-list>
+  <!-- Add Guest to Room -->
+  <div *ngIf="data.booking.status === 'ACTIVE' && data.guests" class="clean">
+    <p class="add-to-room-hint"><strong>Add guest to the room:</strong></p>
+    <div class="add-to-room-section">
+      <!-- Guest Email Input -->
+      <mat-form-field appearance="fill" class="add-to-room-input" appearance="fill">
+        <mat-label>Guest Email</mat-label>
+        <input
+          matInput
+          [(ngModel)]="guestEmail"
+          placeholder="Enter guest's email"
+          type="email"
+          required
+          email
+        />
+        <mat-error *ngIf="guestEmail && !isValidEmail(guestEmail)">
+          Please enter a valid email address.
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Add Guest Button -->
+      <div appearance="fill" class="add-to-room-input" appearance="fill">
+        <button
+          mat-raised-button
+          color="accent"
+          class="add-to-room-input"
+          (click)="addGuestToRoom()"
+          [disabled]="!guestEmail || !isValidEmail(guestEmail)"
+        >
+          Add Guest to the Room
+        </button>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>
+<div mat-dialog-actions>
+  <button mat-button (click)="onClose()">Close</button>
+</div>
+

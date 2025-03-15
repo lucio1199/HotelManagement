@@ -1,0 +1,79 @@
+@use '@angular/material' as mat;
+
+$custom-primary: mat.define-palette((
+  100: #E4E0E1,
+  500: #D6C0B3,
+  700: #AB886D,
+  900: #493628,
+  contrast: (
+    100: black,
+    500: black,
+    700: white,
+    900: white,
+  )
+));
+
+$custom-accent: mat.define-palette((
+  100: #FFE082,
+  500: #FFC107,
+  700: #FFA000,
+  900: #FF6F00,
+  contrast: (
+    100: black,
+    500: black,
+    700: white,
+    900: white,
+  )
+));
+
+$custom-warn: mat.define-palette(mat.$red-palette);
+
+$custom-theme: mat.define-light-theme((
+  color: (
+    primary: $custom-primary,
+    accent: $custom-accent,
+    warn: $custom-warn,
+  ),
+));
+
+
+@include mat.all-component-themes($custom-theme);
+
+
+/* You can add global styles to this file, and also import other style files */
+body {
+  background-color: whitesmoke;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.custom-primary-100 {
+  color: var(--mat-primary-100) !important; /* Text color */
+  background-color: var(--mat-primary-100) !important; /* Background color */
+}
+
+.custom-primary-500 {
+  color: var(--mat-primary-500) !important; /* Text color */
+  background-color: var(--mat-primary-500) !important; /* Background color */
+}
+
+.custom-primary-700 {
+  color: var(--mat-primary-700) !important; /* Text color */
+  background-color: var(--mat-primary-700) !important; /* Background color */
+}
+
+.custom-primary-900 {
+  color: var(--mat-primary-900) !important; /* Text color */
+  background-color: var(--mat-primary-900) !important; /* Background color */
+}
+
+
+
+

@@ -1,0 +1,30 @@
+<mat-card class="search-bar">
+  <form [formGroup]="searchForm" class="search-from-container" (ngSubmit)="onSubmit()">
+    <mat-form-field class="search-bar-element" appearance="outline">
+      <mat-label>Enter a date range</mat-label>
+      <mat-date-range-input [rangePicker]="picker">
+        <input matStartDate formControlName="start" placeholder="Start date">
+        <input matEndDate formControlName="end" placeholder="End date">
+      </mat-date-range-input>
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-date-range-picker #picker></mat-date-range-picker>
+    </mat-form-field>
+
+    <mat-form-field class="search-bar-element" appearance="outline">
+      <mat-label>Number of Persons</mat-label>
+      <input matInput formControlName="persons" placeholder="Number of Persons" type="number" />
+    </mat-form-field>
+
+    <mat-form-field class="search-bar-element" appearance="outline">
+      <mat-label>Min Price (EUR)</mat-label>
+      <input matInput formControlName="minPrice" placeholder="Min Price (EUR)" type="number"/>
+    </mat-form-field>
+
+    <mat-form-field class="search-bar-element" appearance="outline">
+      <mat-label>Max Price (EUR)</mat-label>
+      <input matInput formControlName="maxPrice" placeholder="Max Price (EUR)" type="number"/>
+    </mat-form-field>
+
+    <button mat-raised-button class="search-bar-button" color="primary" type="submit" [disabled]="searchForm.invalid">Search</button>
+  </form>
+</mat-card>

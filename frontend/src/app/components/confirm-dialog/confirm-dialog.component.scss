@@ -1,0 +1,20 @@
+::ng-deep {
+  .mat-dialog-content {
+    display: flex;
+    justify-content: center;  /* Horizontally centers the content */
+    align-items: center;      /* Vertically centers the content */
+    min-height: 100px;        /* You can adjust this as needed */
+  }
+
+  .mat-dialog-title {
+    text-align: center;  /* Centers the title */
+  }
+
+  .mat-dialog-actions {
+    justify-content: center; /* Centers the action buttons */
+  }
+
+  .mat-button {
+    min-width: 100px; /* Optional, ensures buttons are large enough */
+  }
+}

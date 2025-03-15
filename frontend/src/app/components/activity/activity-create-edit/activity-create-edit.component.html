@@ -1,0 +1,226 @@
+<mat-card class="activity-form">
+  <h2>{{ modeText }} Activity</h2>
+  <!-- Picture Upload Section -->
+
+
+  <!-- Activity Details Form -->
+  <form [formGroup]="activityForm" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Activity Name</mat-label>
+      <mat-hint align="end">{{ activityForm.get('name')?.value?.length || 0 }}/100</mat-hint>
+      <mat-error *ngIf="activityForm.get('name')?.hasError('maxlength')">
+        Maximum 100 characters allowed.
+      </mat-error>
+      <input matInput formControlName="name" placeholder="Enter activity name" />
+    </mat-form-field>
+
+    <div class="image-upload">
+      <div *ngIf="!uploadedImage" class="upload-placeholder">
+        <mat-icon>add_photo_alternate</mat-icon>
+        <input type="file" accept="image/*" (change)="onFileSelected($event)" hidden #fileInput>
+        <button type="button" mat-raised-button (click)="fileInput.click()">Upload a picture</button>
+      </div>
+      <div *ngIf="uploadedImage" class="uploaded-image">
+        <img [src]="uploadedImage" alt="Activity Image" />
+        <button type="button" mat-icon-button (click)="removeImage()">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Description</mat-label>
+      <mat-hint align="end">{{ activityForm.get('description')?.value?.length || 0 }}/1000</mat-hint>
+      <mat-error *ngIf="activityForm.get('name')?.hasError('maxlength')">
+        Maximum 1000 characters allowed.
+      </mat-error>
+      <textarea matInput formControlName="description" placeholder="Enter Description..."></textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Price per timeslot</mat-label>
+      <mat-error *ngIf="activityForm.get('price')?.hasError('max')">
+        Price cannot exceed 10,000.
+      </mat-error>
+      <input matInput formControlName="price" placeholder="Enter price" type="number" [min]="1" [max]="10000"/>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Number of Persons per Timeslot</mat-label>
+      <mat-error *ngIf="activityForm.get('capacity')?.hasError('max')">
+        Capacity cannot exceed 1000 persons.
+      </mat-error>
+      <input matInput formControlName="capacity" placeholder="Enter number of persons" type="number" [min]="1" [max]="1000"/>
+    </mat-form-field>
+
+    <!-- Time Slot Type Selection -->
+    <div>
+      <div class="timeslot">
+        <p class="timeslot-hint">Choose a Timeslot</p>
+        <div class="time-slot-selection">
+          <button
+            type="button"
+            mat-raised-button
+            [color]="selectedButton === 'daily' ? 'warn' : 'primary'"
+            (click)="selectTimeSlotType('daily')"
+          >
+            Daily
+          </button>
+          <button
+            type="button"
+            mat-raised-button
+            [color]="selectedButton === 'weekly' ? 'warn' : 'primary'"
+            (click)="selectTimeSlotType('weekly')"
+          >
+            Weekly Days
+          </button>
+          <button
+            type="button"
+            mat-raised-button
+            [color]="selectedButton === 'specificDate' ? 'warn' : 'primary'"
+            (click)="selectTimeSlotType('specificDate')"
+          >
+            Specific Date
+          </button>
+        </div>
+
+        <div *ngIf="selectedTimeSlotType === 'daily'">
+          <div class="timeslot-section">
+            <mat-form-field appearance="fill" class="timeslot-input">
+              <mat-label>From</mat-label>
+              <select matNativeControl formControlName="fromTime">
+                <option *ngFor="let time of timeOptions" [value]="time">{{ time }}</option>
+              </select>
+            </mat-form-field>
+            <mat-form-field appearance="fill" class="timeslot-input">
+              <mat-label>To</mat-label>
+              <select matNativeControl formControlName="toTime">
+                <option *ngFor="let time of timeOptions" [value]="time">{{ time }}</option>
+              </select>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div *ngIf="selectedTimeSlotType === 'weekly'">
+          <div *ngFor="let day of weeklyDays; let i = index" class="timeslot-section">
+            <mat-form-field appearance="outline" class="timeslot-input">
+              <mat-label>Day of Week</mat-label>
+              <mat-select [(value)]="weeklyDays[i]" (selectionChange)="onDaySelectionChange(i)">
+                <mat-option *ngFor="let day of daysOfWeek" [value]="day">
+                  {{ day }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+
+            <div class="timeslot-input">
+              <mat-form-field appearance="fill" class="timeslot-input">
+                <mat-label>From</mat-label>
+                <mat-select matNativeControl [(value)]="weeklyFroms[i]" (change)="onTimeSelectionChange(i, 'from', $event.target.value)">
+                  <mat-option *ngFor="let time of timeOptions" [value]="time">{{ time }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field appearance="fill" class="timeslot-input">
+                <mat-label>To</mat-label>
+                <mat-select matNativeControl [(value)]="weeklyTos[i]" (change)="onTimeSelectionChange(i, 'to', $event.target.value)">
+                  <mat-option *ngFor="let time of timeOptions" [value]="time">{{ time }}</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+            </div>
+
+            <!-- Remove Weekly Day Button -->
+            <button *ngIf="weeklyDays.length>1" mat-icon-button color="warn" (click)="removeWeeklyDay(i)" type="button">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+
+          <!-- Add New Weekly Day Button -->
+          <button *ngIf="weeklyDays.length<6" mat-raised-button color="accent" (click)="addWeeklyDay()" class="timeslot-add" aria-label="Add day" type="button">
+            <mat-icon class="mat-icon" fontIcon="add"></mat-icon>
+            Add day
+          </button>
+
+        </div>
+
+        <div *ngIf="selectedTimeSlotType === 'specificDate'">
+          <mat-form-field appearance="outline" class="timeslot-input">
+            <mat-label>Choose a date</mat-label>
+            <input formControlName="specificDate" matInput [matDatepicker]="picker">
+            <mat-hint>MM/DD/YYYY</mat-hint>
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="activityForm.get('specificDate')?.hasError('pastDate')">
+              Date cannot be in the past.
+            </mat-error>
+          </mat-form-field>
+          <div class="timeslot-section">
+            <mat-form-field appearance="fill" class="timeslot-input">
+              <mat-label>From</mat-label>
+              <select matNativeControl formControlName="fromTime">
+                <option *ngFor="let time of timeOptions" [value]="time">{{ time }}</option>
+              </select>
+            </mat-form-field>
+            <mat-form-field appearance="fill" class="timeslot-input">
+              <mat-label>To</mat-label>
+              <select matNativeControl formControlName="toTime">
+                <option *ngFor="let time of timeOptions" [value]="time">{{ time }}</option>
+              </select>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Category Selection -->
+    <div class="category">
+      <p class="category-hint">Choose 1 or more Categories</p>
+        <div formGroupName="categories" class="category-slot-selection">
+          <label *ngFor="let category of categories">
+            <mat-checkbox [formControlName]="category">{{ category }}</mat-checkbox>
+          </label>
+        </div>
+    </div>
+
+
+
+
+    <div class="additional-images">
+      <input
+        type="file"
+        (change)="onAdditionalImageSelected($event)"
+        accept="image/*"
+        multiple
+        hidden
+        #additionalFileInput
+      />
+      <button
+        type="button"
+        mat-raised-button
+        (click)="additionalFileInput.click()"
+        color="primary"
+      >
+        Upload Additional Images
+      </button>
+
+      <div class="additional-images-preview">
+        <div
+          *ngFor="let image of additionalImages; let i = index"
+          class="image-preview"
+        >
+          <img [src]="image" alt="Additional Image {{ i + 1 }}" />
+          <button
+            type="button"
+            mat-icon-button
+            (click)="removeAdditionalImage(i)"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="form-actions">
+      <button mat-raised-button color="warn" type="button" (click)="goBack()">Cancel</button>
+      <button mat-raised-button color="primary" type="submit" [disabled]="activityForm.invalid">{{ modeText }}</button>
+    </div>
+  </form>
+</mat-card>

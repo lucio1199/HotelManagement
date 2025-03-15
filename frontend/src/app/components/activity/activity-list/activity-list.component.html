@@ -1,0 +1,207 @@
+<h1>Activities</h1>
+
+<mat-card class="search-bar">
+  <form [formGroup]="guestSearchForm" class="search-form-container" (ngSubmit)="onGuestSubmit()">
+    <!-- Single Date Picker -->
+    <mat-form-field class="search-bar-element" appearance="outline">
+      <mat-label>Name</mat-label>
+      <input matInput formControlName="name" placeholder="Name" type="text"/>
+      <mat-error *ngIf="guestSearchForm.get('name').hasError('maxlength')">
+        Name can be a maximum of 100 characters.
+      </mat-error>
+    </mat-form-field>
+
+
+    <mat-form-field class="search-bar-element date-picker" appearance="outline">
+      <mat-label>Select a date</mat-label>
+      <input matInput [matDatepicker]="picker" formControlName="date" placeholder="Select date">
+      <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+      <mat-error *ngIf="guestSearchForm.get('date').hasError('required')">
+        Date is required.
+      </mat-error>
+      <mat-error *ngIf="guestSearchForm.get('date').hasError('pastDate')">
+        Date cannot be in the past.
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Guests Input -->
+    <mat-form-field class="search-bar-element" appearance="outline">
+      <mat-label>Participants</mat-label>
+      <input matInput formControlName="persons" placeholder="Number of Participants" type="number" [min]="0"/>
+      <mat-error *ngIf="guestSearchForm.get('persons').hasError('required')">
+        Number of participants is required.
+      </mat-error>
+      <mat-error *ngIf="guestSearchForm.get('persons').hasError('max')">
+        Number of participants cannot exceed 100.
+      </mat-error>
+      <mat-error *ngIf="guestSearchForm.get('persons').hasError('min')">
+        At least 1 participant is required.
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Min Price Input -->
+    <mat-form-field class="search-bar-element" appearance="outline">
+      <mat-label>Min Price</mat-label>
+      <input matInput formControlName="minPrice" placeholder="Min Price (EUR)" type="number" [min]="0"/>
+      <mat-error *ngIf="guestSearchForm.get('minPrice').hasError('min')">
+        Minimum price cannot be negative.
+      </mat-error>
+      <mat-error *ngIf="guestSearchForm.get('minPrice').hasError('max')">
+        Minimum price cannot exceed 100,000.
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Max Price Input -->
+    <mat-form-field class="search-bar-element" appearance="outline">
+      <mat-label>Max Price</mat-label>
+      <input matInput formControlName="maxPrice" placeholder="Max Price (EUR)" type="number" [min]="0"/>
+      <mat-error *ngIf="guestSearchForm.get('maxPrice').hasError('min')">
+        Maximum price cannot be negative.
+      </mat-error>
+      <mat-error *ngIf="guestSearchForm.get('maxPrice').hasError('max')">
+        Maximum price cannot exceed 100,000.
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Submit Button -->
+    <button mat-raised-button class="search-bar-button" color="primary" type="submit" [disabled]="guestSearchForm.invalid">
+      Search
+    </button>
+  </form>
+</mat-card>
+
+<div class="button-container" *ngIf="authService.isLoggedIn() && authService.getUserRole() === USER_ROLES.ADMIN">
+  <button mat-raised-button color="primary" routerLink="create" aria-label="New activity">
+    <mat-icon class="mat-icon" fontIcon="add"></mat-icon>
+    New Activity
+  </button>
+</div>
+
+<div *ngIf="successMessage" class="alert alert-success">
+  {{ successMessage }}
+</div>
+
+<!-- Recommended Activity Section -->
+<h2 *ngIf="authService.isLoggedIn() && authService.getUserRole() === USER_ROLES.GUEST">Recommended Activity</h2>
+<mat-card *ngIf="recommendedActivity" class="recommended-activity">
+  <table mat-table [dataSource]="[recommendedActivity]" class="recommended-activity-table">
+    <ng-container matColumnDef="mainImage">
+      <th mat-header-cell *matHeaderCellDef> Image</th>
+      <td mat-cell class="table-element" *matCellDef="let activity">
+        <img [src]="activity.mainImage" alt="Recommended Activity Image" class="img-fluid restricted-size">
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> Name</th>
+      <td mat-cell *matCellDef="let activity"> {{ activity.name }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="price">
+      <th mat-header-cell *matHeaderCellDef> Price</th>
+      <td mat-cell *matCellDef="let activity"> {{ activity.price | currency: 'EUR' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="timeslots">
+      <th mat-header-cell *matHeaderCellDef> Timeslots</th>
+      <td mat-cell *matCellDef="let activity">
+        <p *ngIf="activity.activityTimeslotInfos.length === 7">
+          Daily {{ formatTime(activity.activityTimeslotInfos[0].startTime) }} - {{ formatTime(activity.activityTimeslotInfos[0].endTime) }}
+        </p>
+        <ng-container *ngIf="activity.activityTimeslotInfos.length < 7">
+          <p *ngFor="let timeslot of activity.activityTimeslotInfos">
+            {{ timeslot.specificDate
+            ? formatSpecificDate(timeslot.specificDate)
+            : formatDayOfWeek(timeslot.dayOfWeek) + 's' }}
+            {{ formatTime(timeslot.startTime) }} - {{ formatTime(timeslot.endTime) }}
+          </p>
+        </ng-container>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> Actions</th>
+      <td mat-cell *matCellDef="let activity">
+        <button mat-raised-button color="primary" [routerLink]="['timeslots', activity.id]" class="action-button">Book</button>
+        <button mat-raised-button [routerLink]="['detail', activity.id]" color="accent" class="action-button">
+          Details
+        </button>
+      </td>
+    </ng-container>
+
+    <!-- Header and Data Rows -->
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+    <tr mat-row *matRowDef="let row; columns: columnsToDisplay"></tr>
+  </table>
+</mat-card>
+
+<h2 *ngIf="authService.isLoggedIn() && authService.getUserRole() === USER_ROLES.GUEST">Other Activities</h2>
+<!-- Activity Table -->
+<mat-card>
+  <table mat-table [dataSource]="activities">
+    <ng-container matColumnDef="mainImage">
+      <th mat-header-cell *matHeaderCellDef> Image</th>
+      <td mat-cell class="table-element" *matCellDef="let activity">
+        <img [src]="activity.mainImage" alt="Activity image" class="img-fluid restricted-size">
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> Name</th>
+      <td mat-cell *matCellDef="let activity"> {{ activity.name }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="price">
+      <th mat-header-cell *matHeaderCellDef> Price</th>
+      <td mat-cell *matCellDef="let activity"> {{ activity.price | currency: 'EUR' }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="timeslots">
+      <th mat-header-cell *matHeaderCellDef> Timeslots</th>
+      <td mat-cell *matCellDef="let activity">
+        <p *ngIf="activity.activityTimeslotInfos.length === 7">
+          Daily {{ formatTime(activity.activityTimeslotInfos[0].startTime) }} - {{ formatTime(activity.activityTimeslotInfos[0].endTime) }}
+        </p>
+        <ng-container *ngIf="activity.activityTimeslotInfos.length < 7">
+          <p *ngFor="let timeslot of activity.activityTimeslotInfos">
+            {{ timeslot.specificDate
+            ? formatSpecificDate(timeslot.specificDate)
+            : formatDayOfWeek(timeslot.dayOfWeek) + 's' }}
+            {{ formatTime(timeslot.startTime) }} - {{ formatTime(timeslot.endTime) }}
+          </p>
+        </ng-container>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> Actions</th>
+      <td mat-cell *matCellDef="let activity">
+        <div *ngIf="authService.isLoggedIn() && authService.getUserRole() === USER_ROLES.ADMIN">
+          <button mat-raised-button [routerLink]="['detail', activity.id]" color="accent" class="action-button">
+            Info
+          </button>
+          <button mat-raised-button color="primary" [routerLink]="['/activities/edit', activity.id]" class="action-button">Edit</button>
+          <button mat-raised-button color="warn" (click)="confirmDelete(activity)" class="action-button">Delete</button>
+        </div>
+        <div *ngIf="authService.isLoggedIn() && authService.getUserRole() === USER_ROLES.GUEST">
+          <button mat-raised-button
+                  [routerLink]="['timeslots', activity.id]"
+                  [queryParams]="{ date: guestSearchForm.get('date').value, participants: guestSearchForm.get('persons').value }"
+                  color="primary" class="action-button">
+            Book
+          </button>
+          <button mat-raised-button [routerLink]="['detail', activity.id]" color="accent" class="action-button">
+            Details
+          </button>
+        </div>
+      </td>
+    </ng-container>
+
+    <!-- Header and Data Rows -->
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+    <tr mat-row *matRowDef="let row; columns: columnsToDisplay"></tr>
+  </table>
+  <mat-paginator [length]="totalActivities" [pageSize]="pageSize" (page)="onPageChange($event)">
+  </mat-paginator>
+</mat-card>

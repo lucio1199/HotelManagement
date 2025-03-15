@@ -1,0 +1,159 @@
+:host {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 2rem;
+  background-color: #f8f9fa;
+}
+
+.ui-config-card {
+  width: 100%;
+  max-width: 600px;
+  padding: 2rem;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  color: #4a4a4a;
+}
+
+mat-form-field {
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+label {
+  display: block;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #4a4a4a;
+}
+.modules {
+  margin-bottom: 2rem;
+
+
+
+  .module-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+
+    mat-checkbox {
+      font-size: 0.9rem;
+    }
+  }
+}
+
+.image-upload {
+  margin-bottom: 2rem;
+
+  .upload-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed #ccc;
+    border-radius: 6px;
+    padding: 1rem;
+    text-align: center;
+    color: #777;
+    cursor: pointer;
+    margin-bottom: 1rem;
+
+    mat-icon {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+  }
+
+  .uploaded-images {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+
+    .image-container {
+      position: relative;
+
+      img {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      button {
+        position: absolute;
+        top: -10px;
+        right: -10px;
+        background: white;
+        border-radius: 50%;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+
+        mat-icon {
+          color: #ff4d4f;
+        }
+      }
+    }
+  }
+}
+
+button {
+  &.mat-raised-button {
+    font-size: 1rem;
+    font-weight: 600;
+    text-transform: none;
+    color: white;
+    background-color: #6b8e23;
+    margin-top: 1rem;
+
+    &:hover {
+      background-color: #556b2f;
+    }
+
+    &[disabled] {
+      background-color: #ccc;
+    }
+  }
+}
+.half-board-section {
+  margin-bottom: 24px;
+  padding: 16px;
+  background-color: #f9f9f9; /* Add a subtle background for distinction */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+
+  label {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    display: inline-block;
+    color: #4a4a4a; /* Slightly darker text color */
+  }
+
+  .half-board-controls {
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
+    gap: 8px; /* Add spacing between checkbox and input field */
+
+    mat-checkbox {
+      margin: 0; /* Ensure no extra margin around the checkbox */
+    }
+
+    mat-form-field.price-field {
+      width: 100%; /* Make input field span the full width */
+    }
+  }
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 10px;
+}

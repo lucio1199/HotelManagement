@@ -1,0 +1,102 @@
+<mat-card class="room-form">
+  <h2>{{ modeText }} Room</h2>
+  <!-- Picture Upload Section -->
+
+
+  <!-- Room Details Form -->
+  <form [formGroup]="roomForm" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Room Name</mat-label>
+      <input matInput formControlName="name" placeholder="Enter room name" />
+      <mat-error *ngIf="roomForm.get('name').hasError('required')">Name is required.</mat-error>
+      <mat-error *ngIf="roomForm.get('name').hasError('minlength')">Name must be at least 3 characters long.</mat-error>
+      <mat-error *ngIf="roomForm.get('name').hasError('maxlength')">Name must be no longer than 40 characters.</mat-error>
+      <mat-error *ngIf="roomForm.get('name').hasError('pattern')">Name can only contain letters and spaces.</mat-error>
+    </mat-form-field>
+
+    <div class="image-upload">
+      <div *ngIf="!uploadedImage" class="upload-placeholder">
+        <mat-icon>add_photo_alternate</mat-icon>
+        <input type="file" accept="image/*" (change)="onFileSelected($event)" hidden #fileInput>
+        <button type="button" mat-raised-button (click)="fileInput.click()">Upload a picture</button>
+      </div>
+      <div *ngIf="uploadedImage" class="uploaded-image">
+        <img [src]="uploadedImage" alt="Room Image" />
+        <button type="button" mat-icon-button (click)="removeImage()">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Description</mat-label>
+      <textarea matInput formControlName="description" placeholder="Enter Description..."></textarea>
+      <mat-error *ngIf="roomForm.get('description').hasError('required')">Description is required.</mat-error>
+      <mat-error *ngIf="roomForm.get('description').hasError('minlength')">Description must be at least 3 characters long.</mat-error>
+      <mat-error *ngIf="roomForm.get('description').hasError('maxlength')">Description must be no longer than 100 characters.</mat-error>
+      <mat-error *ngIf="roomForm.get('description').hasError('pattern')">Description can only contain letters and spaces.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Price per night (EUR)</mat-label>
+      <input matInput formControlName="price" placeholder="Enter price (EUR)"/>
+      <mat-error *ngIf="roomForm.get('price').hasError('required')">Price is required.</mat-error>
+      <mat-error *ngIf="roomForm.get('price').hasError('min')">Price must be at least 1.</mat-error>
+      <mat-error *ngIf="roomForm.get('price').hasError('max')">Price must not exceed 10,000.</mat-error>
+      <mat-error *ngIf="roomForm.get('price').hasError('pattern')">Price can only contain numbers.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Number of Persons</mat-label>
+      <input matInput formControlName="capacity" placeholder="Enter number of persons"/>
+      <mat-error *ngIf="roomForm.get('capacity').hasError('required')">Number of persons is required.</mat-error>
+      <mat-error *ngIf="roomForm.get('capacity').hasError('min')">Number of persons must be at least 1.</mat-error>
+      <mat-error *ngIf="roomForm.get('capacity').hasError('max')">Number of persons must not exceed 6.</mat-error>
+      <mat-error *ngIf="roomForm.get('capacity').hasError('pattern')">Number of persons can only contain numbers.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width" *ngIf="nukiEnabled">
+      <mat-label>Smart Lock ID</mat-label>
+      <input matInput formControlName="smartLockId" placeholder="Enter smart lock ID"/>
+      <mat-error *ngIf="roomForm.get('smartLockId').hasError('minlength')">Smart Lock ID must be at least 1 character long.</mat-error>
+    </mat-form-field>
+
+    <div class="additional-images">
+      <input
+        type="file"
+        (change)="onAdditionalImageSelected($event)"
+        accept="image/*"
+        multiple
+        hidden
+        #additionalFileInput
+      />
+      <button
+        type="button"
+        mat-raised-button
+        (click)="additionalFileInput.click()"
+      >
+        Upload Additional Images
+      </button>
+
+      <div class="additional-images-preview">
+        <div
+          *ngFor="let image of additionalImages; let i = index"
+          class="image-preview"
+        >
+          <img [src]="image" alt="Additional Image {{ i + 1 }}" />
+          <button
+            type="button"
+            mat-icon-button
+            (click)="removeAdditionalImage(i)"
+          >
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="form-actions">
+      <button mat-raised-button color="warn" type="button" (click)="goBack()">Cancel</button>
+      <button mat-raised-button color="primary" type="submit" [disabled]="roomForm.invalid">{{ modeText }}</button>
+    </div>
+  </form>
+</mat-card>

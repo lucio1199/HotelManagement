@@ -1,0 +1,49 @@
+<h1>Rooms</h1>
+
+<div class="center-container">
+  <mat-card class="image-card" appearance="outlined">
+    <button mat-raised-button color="primary" class="button go-back" (click)="goBack()">
+      Go Back
+    </button>
+    <mat-card-header>
+      <mat-card-title>{{room?.name}}</mat-card-title>
+    </mat-card-header>
+    <div class="slider-container">
+      <button *ngIf="room?.additionalImages.length > 0" mat-icon-button (click)="previousImage()" class="slider-button">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+
+      <img [src]="currentImage" alt="Room image" class="img-fluid main-image">
+
+      <button *ngIf="room?.additionalImages.length > 0" mat-icon-button (click)="nextImage()" class="slider-button">
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+    </div>
+  </mat-card>
+
+  <div class="card-container">
+    <mat-card class="description-card" appearance="outlined">
+      <mat-card-content>
+        <p>{{room?.description}}</p>
+        <p>Capacity: {{room?.capacity}} {{room?.capacity > 1 ? 'persons' : 'person'}}</p>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="description-card" appearance="outlined">
+      <mat-card-content>
+        <p>Price: {{ room?.price | currency:'EUR':'symbol':'1.2-2' || 'N/A' }} per night</p>
+        <p class="title">Room available:</p>
+        <div class="dates" *ngIf="startDate && endDate">
+          <p class="date">From: {{ startDate | date }}</p>
+          <p class="date">To: {{ endDate | date }}</p>
+        </div>
+        <p *ngIf="!startDate || !endDate" class="no-period">No booking period selected.</p>
+      </mat-card-content>
+      <mat-card-actions *ngIf="authService.isLoggedIn() && authService.getUserRole() === USER_ROLES.GUEST">
+        <button mat-raised-button color="primary" class="button" [routerLink]="['/bookings/create', room.id]" [queryParams]="{startDate: startDate, endDate: endDate, roomName: room?.name}">
+          Book Now
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>

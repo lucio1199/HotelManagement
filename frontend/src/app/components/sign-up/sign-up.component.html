@@ -1,0 +1,60 @@
+<div class="pt-5">
+  <div class="signup-container">
+    <mat-card class="signup-card">
+      <mat-card-header>
+        <mat-card-title>
+          <h3>Sign Up</h3>
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <form [formGroup]="signupForm" (ngSubmit)="registerUser()" class="signup-form">
+          <!-- Email Input -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Email</mat-label>
+            <input matInput type="email" name="email" formControlName="email" placeholder="Enter email">
+            <mat-error *ngIf="submitted && signupForm.controls.email.errors?.required">
+              Email is required!
+            </mat-error>
+            <mat-error *ngIf="submitted && signupForm.controls.email.errors?.email">
+              Please enter a valid email address!
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Password Input -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Password</mat-label>
+            <input matInput type="password" name="password" formControlName="password" placeholder="Password">
+            <mat-error *ngIf="submitted && signupForm.controls.password.errors?.required">
+              Password is required!
+            </mat-error>
+            <mat-error *ngIf="submitted && signupForm.controls.password.errors?.minlength">
+              Password must be at least 8 characters long!
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Confirm Password Input -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Confirm Password</mat-label>
+            <input matInput type="password" name="confirmPassword" formControlName="confirmPassword" placeholder="Confirm Password">
+            <mat-error *ngIf="submitted && signupForm.controls.confirmPassword.errors?.required">
+              Please confirm your password!
+            </mat-error>
+            <mat-error *ngIf="submitted && signupForm.controls.confirmPassword.errors?.passwordMismatch">
+              Passwords do not match!
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Sign Up Button -->
+          <div class="button-container">
+            <button mat-raised-button color="primary" type="submit">Sign Up</button>
+          </div>
+
+          <!-- Login Link -->
+          <div class="login-link">
+            Already have an account? <a routerLink="/login">Login here</a>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

@@ -1,0 +1,70 @@
+<h1>Room Cleaning</h1>
+
+<div class="toggle-container">
+  <mat-slide-toggle
+    color="primary"
+    [checked]="showOnlyFreeRooms"
+    (change)="onToggleChange($event.checked)">
+    Show only unoccupied rooms
+  </mat-slide-toggle>
+</div>
+<mat-card>
+  <table mat-table [dataSource]="rooms">
+    <ng-container matColumnDef="mainImage">
+      <th mat-header-cell *matHeaderCellDef> Image</th>
+      <td mat-cell class="table-element" *matCellDef="let room">
+        <img [src]="room.mainImage" alt="Room image" class="img-fluid restricted-size">
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> Name</th>
+      <td mat-cell *matCellDef="let room"> {{ room.name }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="occupancy">
+      <th mat-header-cell *matHeaderCellDef> Occupancy</th>
+      <td mat-cell *matCellDef="let room">
+    <span [ngClass]="occupiedIds.includes(room.id) ? 'occupied' : 'not-occupied'">
+      {{ occupiedIds.includes(room.id) ? 'Occupied' : 'Not Occupied' }}
+    </span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef> Preferred Time</th>
+      <td mat-cell *matCellDef="let room">
+        <span *ngIf="room.cleaningTimeFrom && room.cleaningTimeTo">{{ formatDate(room.cleaningTimeFrom) }} - {{ formatDate(room.cleaningTimeTo) }} </span>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="lastCleanedAt">
+      <th mat-header-cell *matHeaderCellDef> Last Cleaned At</th>
+      <td mat-cell *matCellDef="let room">
+          <span [ngClass]="{'green-highlight': highlightedRooms.get(room.id)}">
+        {{ formatDate(room.lastCleanedAt) }}
+          </span>
+      </td>
+
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> Actions</th>
+      <td mat-cell *matCellDef="let room">
+        <button
+          mat-raised-button
+          [color]="cleaningProcessMap.get(room.id) ? 'warn' : 'accent'"
+          (click)="cleaningProcessMap.get(room.id) ? confirmEndClean(room) : confirmStartClean(room)">
+          {{ cleaningProcessMap.get(room.id) ? 'Finish Cleaning' : 'Start Cleaning' }}
+        </button>
+      </td>
+    </ng-container>
+
+    <!-- Header and Data Rows -->
+    <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+    <tr mat-row *matRowDef="let row; columns: columnsToDisplay"></tr>
+  </table>
+  <mat-paginator [length]="totalRooms" [pageSize]="pageSize" (page)="onPageChange($event)">
+  </mat-paginator>
+
+</mat-card>

@@ -1,0 +1,99 @@
+<mat-tab-group
+  [(selectedIndex)]="selectedRoomIndex"
+  (selectedIndexChange)="onRoomTabChange($event)"
+>
+  <mat-tab *ngFor="let room of rooms; let i = index" [label]="room.name">
+    <mat-card class="room-card">
+      <mat-card-header>
+        <mat-card-title *ngIf="isOwner">My Room</mat-card-title>
+        <mat-card-title *ngIf="!isOwner">Shared Room</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <mat-card-title> {{ room?.name || 'Room Details' }}</mat-card-title>
+        <img
+          *ngIf="room?.mainImage"
+          [src]="room.mainImage"
+          alt="{{ room?.name }}"
+          class="room-image"
+        />
+        <p *ngIf="!room?.mainImage" class="no-image">No image available for this room.</p>
+
+        <!-- Open Door Button -->
+        <button *ngIf="nukiEnabled && room.keyStatus === 'available'"
+          mat-raised-button
+          color="primary"
+          class="action-button"
+          (click)="confirmOpenDoor()"
+        >
+          Open Door
+        </button>
+
+        <!-- From-To Inputs and Ready to Clean Button -->
+        <div *ngIf="uiConfigService.roomCleaningIsEnabled()" class="clean">
+          <p class="cleaning-hint">Preferred Cleaning Time</p>
+          <div class="cleaning-section">
+            <mat-form-field appearance="fill" class="cleaning-input">
+              <mat-label>From</mat-label>
+              <select matNativeControl [(ngModel)]="room.cleaningFrom" [disabled]="getTodaysCleaningTimeForRoom(room.id)">
+                <option *ngFor="let time of timeOptions" [value]="time">{{ time }}</option>
+                <option *ngIf="!timeOptions.includes(room.cleaningFrom)" [value]="room.cleaningFrom" selected>{{ room.cleaningFrom }}</option>
+              </select>
+            </mat-form-field>
+            <mat-form-field appearance="fill" class="cleaning-input">
+              <mat-label>To</mat-label>
+              <select matNativeControl [(ngModel)]="room.cleaningTo" [disabled]="getTodaysCleaningTimeForRoom(room.id)">
+                <option *ngFor="let time of timeOptions" [value]="time">{{ time }}</option>
+                <option *ngIf="!timeOptions.includes(room.cleaningTo)" [value]="room.cleaningTo" selected>{{ room.cleaningTo }}</option>
+              </select>
+            </mat-form-field>
+            <button class="cleaning-input" mat-raised-button color="primary" (click)="markAsReadyToClean(room)" [disabled]="!(selectedRoom.cleaningFrom || selectedRoom.cleaningTo) || getTodaysCleaningTimeForRoom(room.id)">
+              Mark as Vacant
+            </button>
+          </div>
+        </div>
+
+        <!-- Add Guest to Room -->
+        <div *ngIf="digitalCheckInEnabled && isOwner" class="clean">
+          <p class="add-to-room-hint">Add Guest To Your Room</p>
+          <div class="add-to-room-section">
+            <!-- Guest Email Input -->
+            <mat-form-field appearance="fill" class="add-to-room-input" appearance="fill">
+              <mat-label>Guest Email</mat-label>
+              <input
+                matInput
+                [(ngModel)]="guestEmail"
+                placeholder="Enter guest's email"
+                type="email"
+                required
+                email
+              />
+              <mat-error *ngIf="guestEmail && !isValidEmail(guestEmail)">
+                Please enter a valid email address.
+              </mat-error>
+            </mat-form-field>
+
+            <!-- Add Guest Button -->
+            <div appearance="fill" class="add-to-room-input" appearance="fill">
+              <button
+                mat-raised-button
+                color="accent"
+                class="add-to-room-input"
+                (click)="confirmAddGuestToRoom()"
+                [disabled]="!guestEmail || !isValidEmail(guestEmail)"
+              >
+                Add Guest to My Room
+              </button>
+            </div>
+          </div>
+          <!-- Added Guests List -->
+          <app-guest-list [guests]="guests"></app-guest-list>
+        </div>
+        <!-- Check-Out Button -->
+        <button *ngIf="isOwner" mat-raised-button color="warn" class="action-button" (click)="confirmCheckOut(room)">
+          Check-Out
+        </button>
+      </mat-card-content>
+    </mat-card>
+  </mat-tab>
+</mat-tab-group>

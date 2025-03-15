@@ -1,0 +1,141 @@
+.restricted-size {
+  max-width: 100px;
+  max-height: 100px;
+  width: auto;
+  height: auto;
+}
+
+.table-element {
+  height: 105px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 16px;
+  margin-top: 16px;
+  margin-right: 16px;
+}
+
+
+.search-bar-button {
+  margin-left: 20px;
+  margin-right: 10px;
+  width: 120px;
+  height: 60px;
+}
+
+
+.other-fields-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.action-button {
+  margin-right: 5px; /* Passe den Wert nach Bedarf an */
+}
+h1 {
+  font-size: 2.5rem; /* Große Schriftgröße */
+  font-weight: bold; /* Fett gedruckt für mehr Wirkung */
+  text-align: center; /* Zentriert den Titel */
+  letter-spacing: 2px; /* Erhöht den Abstand zwischen den Buchstaben für mehr Klarheit */
+  margin-top: 20px; /* Abstand oben */
+  margin-bottom: 20px; /* Abstand unten */
+  padding-bottom: 10px; /* Abstand unter dem Titel */
+}
+
+.search-bar {
+  margin: 20px auto;
+  max-width: 1000px;
+}
+
+.search-form-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap; /* Erlaubt den Umbruch bei Bedarf */
+}
+
+.search-bar-element {
+  flex: 1;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 25px; /* Verringert den Abstand oben */
+}
+
+.search-bar-button {
+  margin-left: 20px;
+  margin-right: 10px;
+  width: 120px;
+  height: 60px;
+}
+
+.search-bar {
+  margin: 20px auto;
+  max-width: 1000px;
+}
+
+.date-range-picker {
+  flex: 2; /* Passt die Breite des Datumsbereichs an */
+}
+
+.other-fields-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.table-element {
+  height: 105px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 16px;
+  margin-top: 16px;
+  margin-right: 16px;
+}
+
+.action-button {
+  margin-right: 5px;
+}
+
+.restricted-size {
+  max-width: 100px;
+  max-height: 100px;
+  width: auto;
+  height: auto;
+}
+
+.table-element {
+  height: 105px;
+}
+
+.recommended-activity-table {
+  width: 100%; /* Gleiche Breite wie die Tabelle für Aktivitäten */
+  margin: 0 auto; /* Zentriere die Tabelle */
+}
+
+.recommended-activity {
+  padding: 16px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+
+h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-align: center;
+  letter-spacing: 2px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+}
+
+h2 {
+  margin-left: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+

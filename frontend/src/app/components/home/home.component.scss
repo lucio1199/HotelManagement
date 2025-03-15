@@ -1,0 +1,300 @@
+.jumbotron {
+  background: none;
+}
+
+.home-button {
+  font-size: 1.5rem; /* Larger font size */
+  font-weight: bold; /* Emphasize the text */
+  margin-right: 2rem; /* Add spacing to separate it from other nav items */
+  padding: 0.5rem 1.5rem; /* Make it feel like a big button */
+  background-color: #6200ea; /* Material design primary color */
+  color: white; /* Ensure contrast */
+  border-radius: 8px; /* Slightly rounded corners */
+  transition: background-color 0.3s ease; /* Smooth transition on hover */
+}
+
+.home-button:hover {
+  background-color: #3700b3; /* Darken on hover for better UX */
+}
+
+.navbar-links {
+  display: flex;
+  flex-grow: 1;
+  justify-content: flex-start;
+}
+
+.homepage-container {
+  max-width: 1200px; /* Define a maximum width */
+  margin: 0 auto; /* Center the container */
+  padding: 20px 20px; /* Add padding */
+  text-align: center; /* Center-align text */
+  background-color: #f5f5f5; /* Light gray background */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Center container for the image slider */
+.center-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* Image card styling */
+.image-card {
+  width: 600px;
+  padding: 16px;
+  margin: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: white; /* Background for image card */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+/* Styling for the main image */
+.main-image {
+  height: 400px;
+  width: 100%;
+  object-fit: contain;
+  background-color: #f5f5f5;
+  border: 2px solid #ddd; /* Border around the image */
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  margin-bottom: 20px;
+}
+
+/* Slider container styling */
+.slider-container {
+  width: 100%;
+  max-width: 600px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Styling for the navigation buttons */
+.slider-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.7); /* Slightly darker background */
+  color: white; /* White arrow color */
+  width: 40px;
+  height: 40px;
+  border-radius: 50%; /* Circular buttons */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: background-color 0.3s;
+  border: none;
+}
+
+.slider-button:first-of-type {
+  left: 10px;
+}
+
+.slider-button:last-of-type {
+  right: 10px;
+}
+
+/* Hover effect for buttons */
+.slider-button:hover {
+  background-color: rgba(0, 0, 0, 0.9); /* Darker background on hover */
+}
+
+/* Description section styling */
+.about-section {
+  text-align: center;
+  padding: 20px;
+  margin-top: 40px;
+}
+
+.map-section {
+  text-align: center;
+  margin: 40px 0;
+  padding: 20px;
+}
+
+.map-section h2 {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+}
+
+.map-section iframe {
+  width: 100%;
+  max-width: 800px;
+  height: 450px;
+  border: none;
+  border-radius: 8px; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+}
+
+.welcome-container {
+  text-align: center;
+  padding: 60px 20px;
+  margin-bottom: 30px;
+}
+
+.welcome-header {
+  font-size: 3.5rem; /* Larger font size */
+  font-weight: 800; /* Bold for emphasis */
+  color: #333; /* Dark gray for a modern look */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+  margin-bottom: 20px;
+}
+
+.description-short {
+  font-size: 1.5rem; /* Larger font for the description */
+  font-weight: 400;
+  color: #555; /* Medium gray for contrast */
+  margin-top: 25px;
+}
+
+
+/* Responsive design for smaller screens */
+@media (max-width: 768px) {
+  .image-card {
+    width: 100%;
+  }
+
+  .main-image {
+    height: 400px; /* Adjust height */
+    object-fit: cover; /* Maintain aspect ratio and crop excess */
+    width: 100%; /* Ensure the image takes full width */
+    background-color: #f5f5f5;
+    border-radius: 8px; /* Optional: Add rounded corners */
+  }
+
+  .slider-container {
+    width: 100%;
+    max-width: 800px; /* Adjust max width as needed */
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto; /* Center the slider on the page */
+  }
+
+  .slider-button {
+    position: absolute;
+    top: 50%; /* Center vertically */
+    transform: translateY(-50%); /* Correct vertical alignment */
+    background-color: rgba(0, 0, 0, 0.5); /* Slightly transparent background */
+    color: white; /* White color for contrast */
+    border: none; /* Remove default borders */
+    border-radius: 50%; /* Make the buttons circular */
+    width: 50px; /* Set button size */
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer; /* Add pointer cursor */
+    z-index: 10; /* Ensure the arrows are above the images */
+  }
+
+  slider-button-chevron-right {
+    right: 15px; /* Adjust the position of the right arrow */
+  }
+
+  slider-button-chevron-left {
+    left: 15px; /* Adjust the position of the left arrow */
+  }
+
+  .slider-button:hover {
+    background-color: rgba(0, 0, 0, 0.8); /* Darken on hover */
+    transform: translateY(-50%) scale(1.1); /* Add a slight zoom effect */
+  }
+
+  .activities-container {
+    margin: 50px auto;
+    text-align: center;
+    padding: 40px;
+    background-color: #f9f9f9; /* Light background */
+    border: 1px solid #ddd; /* Subtle border */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow */
+    width: 90%;
+    max-width: 800px;
+  }
+
+  .activities-container h2 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 20px;
+  }
+
+  .activity-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+  }
+
+  .activity-placeholder p {
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: #666; /* Medium gray */
+  }
+
+  .activity-placeholder mat-icon {
+    font-size: 3rem;
+    color: #888; /* Light gray */
+  }
+}
+
+.search-bar {
+  max-width: 1000px;
+}
+
+.search-from-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 100px;
+}
+
+.search-bar-element {
+  flex: 1;
+  margin-left: 10px;
+  margin-top: 25px;
+  margin-right: 10px;
+}
+
+.search-bar-button {
+  margin-left: 20px;
+  margin-right: 10px;
+  width: 120px;
+  height: 60px;
+}
+
+.date-picker-row {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.other-fields-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.date-range-picker {
+  flex: 2; /* Adjust the flex value as needed to make it wider */
+}
+
+.explore-activities-button {
+  font-size: 1.5rem; /* Larger text */
+  padding: 1rem 2rem; /* Increased padding */
+  margin-top: 1rem; /* Space above the button */
+}
+
+

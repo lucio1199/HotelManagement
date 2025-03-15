@@ -1,0 +1,66 @@
+.restricted-size {
+  max-width: 100px;
+  max-height: 100px;
+  width: auto;
+  height: auto;
+}
+
+.table-element {
+  height: 105px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 16px;
+  margin-top: 16px;
+  margin-right: 16px;
+}
+
+.green-highlight {
+  background-color: lightgreen;
+  transition: background-color 1s ease;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  border-radius: 4px;
+}
+
+.occupied {
+  color: orange;
+}
+
+.not-occupied {
+  color: green;
+}
+
+.toggle-container {
+  display: flex;
+  justify-content: flex-end;
+  padding: 25px;
+}
+
+mat-slide-toggle {
+  margin: 0;
+  transform: scale(1.2);
+}
+table.mat-table .mat-header-row {
+  background-color: lightgreen !important;
+  color: black;
+  font-weight: bold;
+}
+
+h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-align: center;
+  letter-spacing: 2px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+}
+
+
+
+
+
+

@@ -1,0 +1,143 @@
+<mat-card class="guest-form">
+  <h2>{{ modeText }} Guest {{ mode === GuestCreateEditMode.edit ? "with email: " + guestEmail : '' }}</h2>
+
+  <form [formGroup]="guestForm" (ngSubmit)="onSubmit()">
+    <!-- First Name -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>First Name</mat-label>
+      <input matInput formControlName="firstName" placeholder="Enter first name" />
+      <mat-error *ngIf="guestForm.get('firstName')?.hasError('required')">
+        First name is required.
+      </mat-error>
+      <mat-error *ngIf="guestForm.get('firstName')?.hasError('minlength')">
+        First name must be at least 3 characters long.
+      </mat-error>
+      <mat-error *ngIf="guestForm.get('firstName')?.hasError('maxlength')">
+        First name cannot exceed 64 characters.
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Last Name -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Last Name</mat-label>
+      <input matInput formControlName="lastName" placeholder="Enter last name" />
+      <mat-error *ngIf="guestForm.get('lastName')?.hasError('required')">
+        Last name is required.
+      </mat-error>
+      <mat-error *ngIf="guestForm.get('lastName')?.hasError('minlength')">
+        Last name must be at least 3 characters long.
+      </mat-error>
+      <mat-error *ngIf="guestForm.get('lastName')?.hasError('maxlength')">
+        Last name cannot exceed 64 characters.
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Email -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" placeholder="Enter email" type="email" />
+      <mat-error *ngIf="guestForm.get('email')?.hasError('required')">
+        Email is required.
+      </mat-error>
+      <mat-error *ngIf="guestForm.get('email')?.hasError('email')">
+        Invalid email format.
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Date of Birth -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Date of Birth</mat-label>
+      <input matInput formControlName="dateOfBirth" type="date" placeholder="Enter date of birth" />
+      <mat-error *ngIf="guestForm.get('dateOfBirth')?.hasError('required')">
+        Date of birth is required.
+      </mat-error>
+      <mat-error *ngIf="guestForm.get('dateOfBirth')?.hasError('minimumAge')">
+        You must be at least 18 years old. (Your age: {{ guestForm.get('dateOfBirth')?.getError('minimumAge')?.actualAge }})
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Place of Birth -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Place of Birth</mat-label>
+      <input matInput formControlName="placeOfBirth" placeholder="Enter place of birth" />
+    </mat-form-field>
+
+    <!-- Gender -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Gender</mat-label>
+      <mat-select formControlName="gender">
+        <mat-option *ngFor="let gender of genders" [value]="gender.value">
+          {{ gender.viewValue }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Nationality -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Nationality</mat-label>
+      <mat-select formControlName="nationality">
+        <mat-option *ngFor="let nationality of nationalities" [value]="nationality.value">
+          {{ nationality.viewValue }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Address -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Address</mat-label>
+      <input matInput formControlName="address" placeholder="Enter address" />
+      <mat-error *ngIf="guestForm.get('address')?.hasError('minlength')">
+        Address must be at least 3 characters long.
+      </mat-error>
+      <mat-error *ngIf="guestForm.get('address')?.hasError('maxlength')">
+        Address cannot exceed 256 characters.
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Passport Number -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Passport Number</mat-label>
+      <input matInput formControlName="passportNumber" placeholder="Enter passport number" />
+      <mat-error *ngIf="guestForm.get('passportNumber')?.hasError('minlength')">
+        Passport Number must be at least 3 characters long.
+      </mat-error>
+      <mat-error *ngIf="guestForm.get('passportNumber')?.hasError('maxlength')">
+        Passport Number exceed 256 characters.
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Phone Number -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Phone Number</mat-label>
+      <input matInput formControlName="phoneNumber" placeholder="Enter phone number" type="tel" />
+      <mat-error *ngIf="guestForm.get('phoneNumber')?.hasError('minlength')">
+        Phone number must be at least 7 digits long.
+      </mat-error>
+      <mat-error *ngIf="guestForm.get('phoneNumber')?.hasError('maxlength')">
+        Phone number cannot exceed 15 digits.
+      </mat-error>
+    </mat-form-field>
+
+
+
+    <!-- Password -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Password</mat-label>
+      <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" placeholder="Enter password" />
+      <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Toggle password visibility'" [attr.aria-pressed]="!hidePassword">
+        <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+      </button>
+      <mat-error *ngIf="guestForm.get('password')?.hasError('required')">
+      Password is required.
+      </mat-error>
+    </mat-form-field>
+
+    <!-- Form Actions -->
+    <div class="form-actions">
+      <button mat-raised-button color="warn" type="button" (click)="goBack()">Cancel</button>
+      <button mat-raised-button color="primary" type="submit" [disabled]="guestForm.invalid">
+        {{ modeText }}
+      </button>
+    </div>
+  </form>
+</mat-card>

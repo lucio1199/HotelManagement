@@ -1,0 +1,25 @@
+.search-bar {
+  margin: 20px auto;
+  max-width: 800px;
+}
+
+.search-from-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 100px;
+}
+
+.search-bar-element {
+  flex: 1;
+  margin-left: 10px;
+  margin-top: 25px;
+  margin-right: 10px;
+}
+
+.search-bar-button {
+  margin-left: 20px;
+  margin-right: 10px;
+  width: 120px;
+  height: 60px;
+}

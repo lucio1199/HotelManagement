@@ -1,0 +1,143 @@
+<mat-card class="check-in-card fancy-check-in">
+  <mat-card-header>
+    <mat-card-title>
+      <ng-container *ngIf="!isManualCheckIn && !isGuestAddToRoom">
+        Welcome to Digital Check-In
+      </ng-container>
+      <ng-container *ngIf="isManualCheckIn && !isGuestAddToRoom">
+        Welcome to Manual Check-In
+      </ng-container>
+      <ng-container *ngIf="!isManualAddToRoom && isGuestAddToRoom">
+        Add Guest to your Room
+      </ng-container>
+      <ng-container *ngIf="isManualAddToRoom && isGuestAddToRoom">
+        Add Guest to Room
+      </ng-container>
+    </mat-card-title>
+    <mat-card-subtitle>
+      <ng-container *ngIf="!isManualCheckIn && !isManualAddToRoom">
+        Please review your booking details and complete your information below.
+      </ng-container>
+      <ng-container *ngIf="isManualCheckIn && !isGuestAddToRoom">
+        Please assist the guest by entering their details below.
+      </ng-container>
+      <ng-container *ngIf="!isManualAddToRoom && isGuestAddToRoom">
+        Please enter the information of the guest you want to add to your room below.
+      </ng-container>
+      <ng-container *ngIf="isManualAddToRoom && isGuestAddToRoom">
+        Please enter the information of the guest you want to add to the room below.
+      </ng-container>
+    </mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div class="room-details">
+      <p><strong>Room:</strong> {{ booking?.roomName || 'N/A' }}</p>
+      <p><strong>From:</strong> {{ booking?.startDate | date:'mediumDate' || 'N/A' }}</p>
+      <p><strong>To:</strong> {{ booking?.endDate | date:'mediumDate' || 'N/A' }}</p>
+      <p><strong>Price per night:</strong> {{ booking?.price | currency:'EUR':'symbol':'1.2-2' || 'N/A' }}</p>
+      <p><strong>Tax:</strong> {{ tax | currency:'EUR':'symbol':'1.2-2' || 'N/A' }}</p>
+      <p><strong>Total price:</strong> {{ price | currency:'EUR':'symbol':'1.2-2' || 'N/A' }}</p>
+    </div>
+
+    <form [formGroup]="checkInForm" (ngSubmit)="onSubmit()">
+      <h2>{{ isManualCheckIn ? "Guest Information" : "Your Information" }}</h2>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ isManualCheckIn ? "Guest's First Name" : "Your First Name" }}</mat-label>
+        <input matInput type="text" formControlName="firstname" placeholder="Enter First Name">
+        <mat-error *ngIf="submitted && checkInForm.controls.firstname.errors?.required">
+          First name is required!
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ isManualCheckIn ? "Guest's Last Name" : "Your Last Name" }}</mat-label>
+        <input matInput type="text" formControlName="lastname" placeholder="Enter Last Name">
+        <mat-error *ngIf="submitted && checkInForm.controls.lastname.errors?.required">
+          Last name is required!
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ isManualCheckIn ? "Guest's Date of Birth" : "Your Date of Birth" }}</mat-label>
+        <input formControlName="dateofbirth" matInput [min]="minDate" [max]="maxDate" [matDatepicker]="picker">
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error *ngIf="submitted && checkInForm.controls.dateofbirth.errors?.required">
+          Date of birth is required!
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ isManualCheckIn ? "Guest's Place of Birth" : "Your Place of Birth" }}</mat-label>
+        <input matInput type="text" formControlName="placeofbirth" placeholder="Enter Place of Birth">
+        <mat-error *ngIf="submitted && checkInForm.controls.placeofbirth.errors?.required">
+          Place of birth is required!
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ isManualCheckIn ? "Guest's Address" : "Your Address" }}</mat-label>
+        <input matInput type="text" formControlName="address" placeholder="Enter Address">
+        <mat-error *ngIf="submitted && checkInForm.controls.address.errors?.required">
+          Address is required!
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ isManualCheckIn ? "Guest's Phone Number" : "Your Phone Number" }}</mat-label>
+        <input matInput type="tel" formControlName="phonenumber" placeholder="Enter Phone Number">
+        <mat-error *ngIf="submitted && checkInForm.controls.phonenumber.errors?.required">
+          Phone number is required!
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ isManualCheckIn ? "Guest's Passport Number" : "Your Passport Number" }}</mat-label>
+        <input matInput type="text" formControlName="passportnumber" placeholder="Enter Passport Number">
+        <mat-error *ngIf="submitted && checkInForm.controls.passportnumber.errors?.required">
+          Passport number is required!
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ isManualCheckIn ? "Guest's Gender" : "Your Gender" }}</mat-label>
+        <mat-select formControlName="gender">
+          <mat-option *ngFor="let gender of genders" [value]="gender.value">
+            {{ gender.viewValue }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="submitted && checkInForm.controls.gender.errors?.required">
+          Please select a gender!
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>{{ isManualCheckIn ? "Guest's Nationality" : "Your Nationality" }}</mat-label>
+        <mat-select formControlName="nationality">
+          <mat-option *ngFor="let nationality of nationalities" [value]="nationality.value">
+            {{ nationality.viewValue }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="submitted && checkInForm.controls.nationality.errors?.required">
+          Please select a nationality!
+        </mat-error>
+      </mat-form-field>
+    </form>
+
+    <div class="passport-upload">
+      <button mat-button (click)="fileInput.click()" color="primary">Upload Passport</button>
+      <input #fileInput id="passportInput" type="file" (change)="onFileChange($event)" accept="application/pdf" hidden>
+      <span>{{ passportName || 'No file chosen' }}</span>
+      <button mat-icon-button *ngIf="passport" color="warn" aria-label="Remove Passport" (click)="confirmDelete()">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+
+    <button mat-raised-button color="primary" (click)="onSubmit()">
+      <ng-container *ngIf="!isManualCheckIn">Check-In</ng-container>
+      <ng-container *ngIf="isManualCheckIn">Submit Guest Information</ng-container>
+    </button>
+  </mat-card-content>
+</mat-card>

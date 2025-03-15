@@ -1,0 +1,50 @@
+<mat-toolbar style="background-color: #AB886D;" class="horizontal-toolbar">
+  <!-- Home Button -->
+  <button mat-button [disabled]="authService.getUserRole() === USER_ROLES.CLEANING_STAFF"  routerLink="/" class="home-button">InnControl</button>
+
+  <!-- Navigation Links -->
+  <div class="nav-links">
+    <a *ngIf="(authService.getUserRole() === USER_ROLES.ADMIN) && uiConfigService.roomCleaningIsEnabled()" mat-button routerLink="/room-cleaning" routerLinkActive="active">Room Cleaning</a>
+    <a *ngIf="authService.isLoggedIn() && checkInService.isCheckedIn()" mat-button routerLink="/my-room" routerLinkActive="active">My Room</a>
+    <a mat-button *ngIf="authService.getUserRole() === USER_ROLES.ADMIN" routerLink="/rooms" routerLinkActive="active">Rooms</a>
+    <a mat-button *ngIf="(authService.getUserRole() === USER_ROLES.GUEST || authService.getUserRole() === USER_ROLES.ADMIN)" routerLink="/activities" routerLinkActive="active">Activities</a>
+    <a *ngIf="authService.getUserRole() === USER_ROLES.GUEST" mat-button routerLink="/bookings/my-bookings" routerLinkActive="active">My bookings</a>
+    <a *ngIf="authService.getUserRole() === USER_ROLES.ADMIN || authService.getUserRole() === USER_ROLES.RECEPTIONIST" mat-button routerLink="bookings/managerbookings" routerLinkActive="active">Bookings</a>
+  </div>
+
+  <!-- Spacer -->
+  <span class="spacer"></span>
+
+  <div *ngIf="!authService.isLoggedIn()" class="signup-container">
+    <a mat-button routerLink="/signup" routerLinkActive="active">Sign Up</a>
+  </div>
+  <div *ngIf="!authService.isLoggedIn()"  routerLinkActive="active" class="signup-container">
+    <a mat-button routerLink="/login" routerLinkActive="active">Login</a>
+  </div>
+  <div *ngIf="authService.isLoggedIn()"  (click)="authService.logoutUser()" class="signup-container">
+    <a mat-button routerLink="/" routerLinkActive="active">Logout</a>
+  </div>
+  <div *ngIf="authService.isLoggedIn()" class="signup-container">
+    <a class="email-text">{{ authService.getUserEmail() }}</a>
+  </div>
+
+  <!-- Menu Button -->
+  <button mat-icon-button *ngIf="authService.isLoggedIn() && authService.getUserRole() === USER_ROLES.ADMIN" [matMenuTriggerFor]="menu" aria-label="Toggle menu">
+    <mat-icon>menu</mat-icon>
+  </button>
+</mat-toolbar>
+
+<mat-menu  #menu="matMenu">
+  <button mat-menu-item *ngIf="authService.isLoggedIn() && authService.getUserRole() === USER_ROLES.ADMIN" routerLink="/ui-config" routerLinkActive="active">
+    Config View
+  </button>
+  <button mat-menu-item *ngIf="authService.isLoggedIn() && authService.getUserRole() === USER_ROLES.ADMIN" routerLink="/employees" routerLinkActive="active">
+    View Employees
+  </button>
+  <button mat-menu-item *ngIf="authService.isLoggedIn() && authService.getUserRole() === USER_ROLES.ADMIN" routerLink="/employees/create" routerLinkActive="active">
+    Create Employee
+  </button>
+  <button mat-menu-item *ngIf="authService.isLoggedIn() && authService.getUserRole() === USER_ROLES.ADMIN" routerLink="/guests" routerLinkActive="active">
+    View Guests
+  </button>
+</mat-menu>

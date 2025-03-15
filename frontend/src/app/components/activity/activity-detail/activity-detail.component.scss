@@ -1,0 +1,107 @@
+.center-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+}
+
+.image-card {
+  width: 600px;
+  padding: 16px;
+  margin: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-container {
+  display: flex;
+  justify-content: space-between;
+  width: 50%;
+  min-height: 200px;
+}
+
+.description-card {
+  width: 50%;
+  margin: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+img {
+  width: 100%;
+}
+
+.main-image {
+  height: 400px;
+  object-fit: contain;
+  background-color: #f5f5f5;
+  margin-bottom: 20px;
+}
+
+.slider-container {
+  width: 100%;
+  max-width: 600px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.slider-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(255, 255, 255, 0.7);
+}
+
+.slider-button:first-of-type {
+  left: 10px;
+}
+
+.slider-button:last-of-type {
+  right: 10px;
+}
+
+.description-card mat-card-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: auto;
+}
+
+.dates {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.date {
+  margin: 0;
+}
+
+.no-period {
+  margin: 0;
+}
+
+.title {
+  margin: 0;
+}
+
+.button {
+  margin-left: 30px;
+  margin-right: 30px;
+  margin-bottom: 5px;
+}
+
+h1 {
+  font-size: 2.5rem; /* Große Schriftgröße */
+  font-weight: bold; /* Fett gedruckt für mehr Wirkung */
+  text-align: center; /* Zentriert den Titel */
+  letter-spacing: 2px; /* Erhöht den Abstand zwischen den Buchstaben für mehr Klarheit */
+  margin-top: 20px; /* Abstand oben */
+  margin-bottom: 20px; /* Abstand unten */
+  padding-bottom: 10px; /* Abstand unter dem Titel */
+}

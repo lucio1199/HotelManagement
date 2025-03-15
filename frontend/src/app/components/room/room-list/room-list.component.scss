@@ -1,0 +1,90 @@
+.restricted-size {
+  max-width: 100px;
+  max-height: 100px;
+  width: auto;
+  height: auto;
+}
+
+.table-element {
+  height: 105px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 16px;
+  margin-top: 16px;
+  margin-right: 16px;
+}
+
+.search-bar {
+  margin: 20px auto;
+  max-width: 1000px;
+  margin-bottom: 40px;
+}
+
+.search-from-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 100px;
+}
+
+.search-bar-element {
+  flex: 1;
+  margin-left: 10px;
+  margin-top: 25px;
+  margin-right: 10px;
+}
+
+.search-bar-button {
+  margin-left: 20px;
+  margin-right: 10px;
+  width: 120px;
+  height: 60px;
+}
+
+.date-picker-row {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.other-fields-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.date-range-picker {
+  flex: 2; /* Adjust the flex value as needed to make it wider */
+}
+
+.action-button {
+  margin-right: 5px; /* Passe den Wert nach Bedarf an */
+}
+
+h1 {
+  font-size: 2.5rem; /* Große Schriftgröße */
+  font-weight: bold; /* Fett gedruckt für mehr Wirkung */
+  text-align: center; /* Zentriert den Titel */
+  letter-spacing: 2px; /* Erhöht den Abstand zwischen den Buchstaben für mehr Klarheit */
+  margin-top: 20px; /* Abstand oben */
+  margin-bottom: 20px; /* Abstand unten */
+  padding-bottom: 10px; /* Abstand unter dem Titel */
+}
+
+.centered-message-container {
+  display: flex;
+  justify-content: center; /* Centers horizontally */
+  align-items: center;     /* Centers vertically */
+  height: 10vh;           /* Full viewport height */
+  text-align: center;      /* Ensure text is centered */
+}
+
+.room-details-button {
+  margin-right: 10px;  /* Adds space to the right of the Room Details button */
+}
+
+.book-now-button {
+  margin-left: 10px;  /* Adds space to the left of the Book Now button */
+}

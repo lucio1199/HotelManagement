@@ -1,0 +1,40 @@
+<div class="pt-5">
+  <div class="login-container">
+    <mat-card class="login-card">
+      <mat-card-header>
+        <mat-card-title>
+          <h3>Login</h3>
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <form [formGroup]="loginForm" (ngSubmit)="loginUser()">
+          <!-- Username Input -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Username</mat-label>
+            <input matInput type="text" name="username" formControlName="username" placeholder="Enter username">
+            <mat-error *ngIf="submitted && loginForm.controls.username.errors?.required">
+              Your username is required!
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Password Input -->
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Password</mat-label>
+            <input matInput type="password" name="password" formControlName="password" placeholder="Password">
+            <mat-error *ngIf="submitted && loginForm.controls.password.errors?.required">
+              Your password is required!
+            </mat-error>
+            <mat-error *ngIf="submitted && loginForm.controls.password.errors?.minlength">
+              Your password must be at least 8 characters long!
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Login Button -->
+          <div class="button-container">
+            <button mat-raised-button color="primary" type="submit">Login</button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

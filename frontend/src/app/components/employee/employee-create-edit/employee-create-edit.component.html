@@ -1,0 +1,61 @@
+<mat-card class="employee-form">
+  <h2>{{ modeText }} Employee {{mode === EmployeeCreateEditMode.edit ? "with ID: " + employeeId : ''}}</h2>
+
+  <form [formGroup]="employeeForm" (ngSubmit)="onSubmit()">
+    <!-- First Name -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>First Name</mat-label>
+      <input matInput formControlName="firstName" placeholder="Enter first name" />
+    </mat-form-field>
+
+    <!-- Last Name -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Last Name</mat-label>
+      <input matInput formControlName="lastName" placeholder="Enter last name" />
+    </mat-form-field>
+
+    <!-- Phone Number (Optional) -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Phone Number</mat-label>
+      <input matInput formControlName="phoneNumber" placeholder="Enter phone number" type="tel" />
+    </mat-form-field>
+
+    <!-- Email -->
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Email</mat-label>
+      <input matInput formControlName="email" placeholder="Enter email" type="email" />
+    </mat-form-field>
+
+    <!-- Password -->
+      <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Password</mat-label>
+          <input matInput
+                 [type]="hidePassword ? 'password' : 'text'"
+                 formControlName="password"
+                 placeholder="Enter password" />
+          <a mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Toggle password visibility'" [attr.aria-pressed]="!hidePassword">
+              <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </a>
+      </mat-form-field>
+
+    <!-- Role Type -->
+      <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Role Type</mat-label>
+          <ng-container *ngIf="isRoleTypeEditable; else readonlyRoleType">
+              <mat-select formControlName="roleType">
+                  <mat-option *ngFor="let role of roleTypes" [value]="role">
+                      {{ role }}
+                  </mat-option>
+              </mat-select>
+          </ng-container>
+          <ng-template #readonlyRoleType>
+              <input matInput [value]="employeeForm.get('roleType')?.value" readonly />
+          </ng-template>
+      </mat-form-field>
+    <div class="form-actions">
+      <button mat-raised-button color="warn" type="button" (click)="goBack()">Cancel</button>
+      <button mat-raised-button color="primary" type="submit" [disabled]="employeeForm.invalid">{{ modeText }}</button>
+    </div>
+  </form>
+</mat-card>
+

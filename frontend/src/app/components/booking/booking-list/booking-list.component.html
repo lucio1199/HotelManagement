@@ -1,0 +1,233 @@
+<h1>Bookings</h1>
+
+<div class="header">
+  <p class="current-date">Today's Date: {{ today | date:'fullDate' }}</p>
+
+  <!-- Global Search Bar -->
+  <mat-card class="search-bar">
+    <form [formGroup]="searchForm" class="search-form-container" (ngSubmit)="onSearch()">
+      <mat-form-field class="search-bar-element" appearance="outline">
+        <mat-label>Enter a valid start date</mat-label>
+        <input matInput [matDatepicker]="startPicker" formControlName="start" placeholder="Select Start Date">
+        <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
+        <mat-datepicker #startPicker></mat-datepicker>
+        <mat-error *ngIf="searchForm.get('start')?.hasError('before1990')">
+          Date must not be earlier than 1990.
+        </mat-error>
+        <mat-error *ngIf="searchForm.get('start')?.hasError('after2027')">
+          Date must not be later than one year from today.
+        </mat-error>
+        <mat-error *ngIf="searchForm.get('start')?.hasError('invalidDate')">
+          Invalid date. Please pick a valid date.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="search-bar-element" appearance="outline">
+        <mat-label>Enter a valid end date</mat-label>
+        <input matInput [matDatepicker]="endPicker" formControlName="end" placeholder="Select End Date">
+        <mat-datepicker-toggle matIconSuffix [for]="endPicker"></mat-datepicker-toggle>
+        <mat-datepicker #endPicker></mat-datepicker>
+        <mat-error *ngIf="searchForm.get('end')?.hasError('before1990')">
+          Date must not be earlier than 1990.
+        </mat-error>
+        <mat-error *ngIf="searchForm.get('end')?.hasError('after2027')">
+          Date must not be later than one year from today.
+        </mat-error>
+        <mat-error *ngIf="searchForm.get('end')?.hasError('invalidDate')">
+          Invalid date. Please pick a valid date.
+        </mat-error>
+      </mat-form-field>
+
+
+
+      <!-- First Name -->
+      <mat-form-field class="search-bar-element" appearance="outline">
+        <mat-label>First Name</mat-label>
+        <input matInput formControlName="firstName" placeholder="Enter First Name" />
+        <mat-error *ngIf="searchForm.get('firstName')?.hasError('invalidName')">
+          Only letters allowed
+        </mat-error>
+        <mat-error *ngIf="searchForm.get('firstName')?.hasError('maxLengthExceeded')">
+          Name cannot exceed 20 characters
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Last Name -->
+      <mat-form-field class="search-bar-element" appearance="outline">
+        <mat-label>Last Name</mat-label>
+        <input matInput formControlName="lastName" placeholder="Enter Last Name" />
+        <mat-error *ngIf="searchForm.get('lastName')?.hasError('invalidName')">
+          Only letters allowed
+        </mat-error>
+        <mat-error *ngIf="searchForm.get('lastName')?.hasError('maxLengthExceeded')">
+          Name cannot exceed 20 characters
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Room Name -->
+      <mat-form-field class="search-bar-element" appearance="outline">
+        <mat-label>Room Name</mat-label>
+        <input matInput formControlName="roomName" placeholder="Enter Room Name" />
+        <mat-error *ngIf="searchForm.get('roomName')?.hasError('maxLengthExceeded')">
+          Room name cannot exceed 20 characters.
+        </mat-error>
+        <mat-error *ngIf="searchForm.get('roomName')?.hasError('invalidName')">
+          Only letters allowed
+        </mat-error>
+      </mat-form-field>
+
+
+      <!-- Phone Number -->
+      <mat-form-field class="search-bar-element" appearance="outline">
+        <mat-label>Phone Number</mat-label>
+        <input matInput formControlName="phoneNumber" placeholder="Enter Phone Number" />
+        <mat-error *ngIf="searchForm.get('phoneNumber')?.hasError('invalidPhoneNumber')">
+          Only numbers and one + allowed
+        </mat-error>
+        <mat-error *ngIf="searchForm.get('phoneNumber')?.hasError('phoneNumberTooLong')">
+          Phone Number cannot exceed 20 characters
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Booking Number Input -->
+      <mat-form-field class="search-bar-element" appearance="outline">
+        <mat-label>Booking Number</mat-label>
+        <input matInput formControlName="bookingNumber" placeholder="Enter Booking Number" />
+        <mat-error *ngIf="searchForm.get('bookingNumber')?.hasError('invalidBookingNumber')">
+          Booking number must start with "BOOK-" and contain alphanumeric characters.
+        </mat-error>
+        <mat-error *ngIf="searchForm.get('bookingNumber')?.hasError('bookingNumberTooLong')">
+          Booking number cannot exceed 12 characters (including "BOOK-").
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="search-bar-element" appearance="outline">
+        <mat-label>Email Address</mat-label>
+        <input matInput formControlName="email" placeholder="Enter Email Address" />
+        <mat-error *ngIf="searchForm.get('email')?.hasError('emailTooLong')">
+          Email must not exceed 50 characters.
+        </mat-error>
+        <mat-error *ngIf="searchForm.get('email')?.hasError('invalidEmail')">
+          Please enter a valid email address in the format: example&#64;domain.com.
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Search Button (Rechts ausgerichtet) -->
+      <div class="search-bar-button-container">
+        <button mat-raised-button class="search-bar-button" color="primary" type="submit" [disabled]="searchForm.invalid || !searchForm.dirty">
+          Search
+        </button>
+      </div>
+    </form>
+  </mat-card>
+</div>
+
+
+
+<table mat-table [dataSource]="bookings">
+
+  <ng-container matColumnDef="bookingDetails">
+    <mat-header-cell *matHeaderCellDef> Booking Details </mat-header-cell>
+    <mat-cell *matCellDef="let row">
+      <button mat-raised-button color="primary" (click)="openBookingDetailsDialog(row)">
+        Details
+      </button>
+    </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="bookingNumber">
+    <mat-header-cell *matHeaderCellDef> Booking Nr </mat-header-cell>
+    <mat-cell *matCellDef="let row">{{ row.bookingNumber }}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="startDate">
+    <mat-header-cell *matHeaderCellDef> Start Date </mat-header-cell>
+    <mat-cell *matCellDef="let row">{{ row.startDate | date:'dd.MM.yyyy' }}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="endDate">
+    <mat-header-cell *matHeaderCellDef> End Date </mat-header-cell>
+    <mat-cell *matCellDef="let row">{{ row.endDate | date:'dd.MM.yyyy' }}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="lastname">
+    <mat-header-cell *matHeaderCellDef> Lastname </mat-header-cell>
+    <mat-cell *matCellDef="let row">{{ row.lastName }}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="totalnights">
+    <mat-header-cell *matHeaderCellDef> Total Nights </mat-header-cell>
+    <mat-cell *matCellDef="let row">{{ row.numberOfNights }}</mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="transactionId">
+    <mat-header-cell *matHeaderCellDef> Transaction ID </mat-header-cell>
+    <mat-cell *matCellDef="let row">{{ row.transactionId }}</mat-cell>
+  </ng-container>
+
+      <!-- Check-in Action Button -->
+        <ng-container matColumnDef="checkIn">
+          <mat-header-cell *matHeaderCellDef> Action </mat-header-cell>
+          <mat-cell *matCellDef="let row">
+            <button mat-raised-button color="primary"
+                    *ngIf="checkInStatuses[row.id] !== null && !checkInStatuses[row.id] && isBookingStarted(row.startDate, row.endDate)"
+                    (click)="manualCheckIn(row.email, row.id)">
+              Check-in
+            </button>
+            <button mat-raised-button color="accent"
+                    *ngIf="checkInStatuses[row.id] && isBookingStarted(row.startDate, row.endDate)"
+                    (click)="confirmManualCheckOut(row.firstName, row.lastName, row.roomName, row.email, row.id)">
+              Check-out
+            </button>
+            <button *ngIf="!row.isPaid && row.status !== 'CANCELLED'"
+                    mat-raised-button color="primary"
+                    (click)="markAsPaid(row.id)">
+              Mark as Paid
+            </button>
+          </mat-cell>
+        </ng-container>
+
+  <!-- Booking Status -->
+  <ng-container matColumnDef="statusCheckIn">
+    <mat-header-cell *matHeaderCellDef> Check In Status </mat-header-cell>
+    <mat-cell *matCellDef="let row">
+            <span>
+               <!-- Wenn der Buchungsstatus 'completed' ist, zeige "Completed" an -->
+              <span *ngIf="row.status === 'COMPLETED'"> Check In Completed</span>
+              <span *ngIf="checkInStatuses[row.id] && isBookingStarted(row.startDate, row.endDate)">{{ getTodayDate() }}: Checked In</span>
+              <span *ngIf="!checkInStatuses[row.id]">{{ isBookingStarted(row.startDate, row.endDate) ? 'Booking Started' : 'Not Started Yet' }}</span>
+            </span>
+    </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="statusBooking">
+    <mat-header-cell *matHeaderCellDef> Booking Status </mat-header-cell>
+    <mat-cell *matCellDef="let booking">
+      <span>{{ booking.status }}</span>
+    </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="paidStatus">
+    <mat-header-cell *matHeaderCellDef> Paid </mat-header-cell>
+    <mat-cell *matCellDef="let booking">
+      <mat-icon *ngIf="booking.isPaid" color="primary">check_circle</mat-icon>
+      <mat-icon *ngIf="!booking.isPaid" color="warn">cancel</mat-icon>
+    </mat-cell>
+  </ng-container>
+
+  <!-- Table Header and Rows -->
+  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+  <mat-row
+    *matRowDef="let row; columns: displayedColumns;"
+    [class.active-row]="selectedRow === row"
+    (click)="onRowClick(row)">
+  </mat-row>
+
+</table>
+
+<mat-paginator
+  [length]="totalBookings"
+  [pageSize]="pageSize"
+  [pageSizeOptions]="[5, 10, 20, 50]"
+  (page)="onPageChanged($event)">
+</mat-paginator>

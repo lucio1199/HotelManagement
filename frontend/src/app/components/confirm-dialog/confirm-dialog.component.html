@@ -1,0 +1,36 @@
+<h1 mat-dialog-title>{{ data.mode }}</h1>
+
+<div mat-dialog-content>
+  <p>{{ data.message }} <strong>{{ data.name }}</strong>?</p>
+</div>
+
+<div mat-dialog-actions>
+  <!-- Show "Cancel" and "Delete" buttons only if data.mode is DialogMode.Deletion -->
+  <ng-container *ngIf="data.mode === 'Deletion'">
+    <button mat-button (click)="onCancel()">Cancel</button>
+    <button mat-button color="warn" (click)="onConfirm()">Delete</button>
+  </ng-container>
+
+  <!-- Show "Cancel" and "Check-Out" buttons only if data.mode is DialogMode.Checkout -->
+  <ng-container *ngIf="data.mode === 'Check-out'">
+    <button mat-button (click)="onCancel()">Cancel</button>
+    <button mat-button color="warn" (click)="onConfirm()">Check-out</button>
+  </ng-container>
+
+  <!-- Show "Cancel" and "Yes" buttons only if data.mode is DialogMode.Confirmation -->
+  <ng-container *ngIf="data.mode === 'Confirmation'">
+    <button mat-button (click)="onCancel()">Cancel</button>
+    <button mat-button color="secondary" (click)="onConfirm()">Yes</button>
+  </ng-container>
+
+  <!-- Show "Cancel" and "Yes" buttons only if data.mode is DialogMode.Update -->
+  <ng-container *ngIf="data.mode === 'Update'">
+    <button mat-button (click)="onCancel()">Cancel</button>
+    <button mat-button (click)="onConfirm()">Okay</button>
+  </ng-container>
+
+  <ng-container *ngIf="data.mode === 'Cancellation'">
+    <button mat-button (click)="onCancel()">No</button>
+    <button mat-button color="warn" (click)="onConfirm()">Cancel</button>
+  </ng-container>
+</div>

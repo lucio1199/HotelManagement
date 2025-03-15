@@ -1,0 +1,59 @@
+<h1>Activities</h1>
+
+<div class="center-container">
+  <mat-card class="image-card" appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>{{activity?.name}}</mat-card-title>
+    </mat-card-header>
+    <div class="slider-container">
+      <button *ngIf="activity?.additionalImages.length > 0" mat-icon-button (click)="previousImage()" class="slider-button">
+        <mat-icon>chevron_left</mat-icon>
+      </button>
+
+      <img [src]="currentImage" alt="Activity image" class="img-fluid main-image">
+
+      <button *ngIf="activity?.additionalImages.length > 0" mat-icon-button (click)="nextImage()" class="slider-button">
+        <mat-icon>chevron_right</mat-icon>
+      </button>
+    </div>
+  </mat-card>
+
+  <div class="card-container">
+    <mat-card class="description-card" appearance="outlined">
+      <mat-card-content>
+        <p>{{activity?.description}}</p>
+        <p>Capacity: {{activity?.capacity}} {{activity?.capacity > 1 ? 'persons' : 'person'}} per timeslots</p>
+        <a>Timeslots: </a>
+        <p *ngFor="let timeslot of displayedTimeslots">
+          {{ timeslot.dayOfWeek === 'Daily'
+          ? 'Daily'
+          : timeslot.specificDate
+          ? formatSpecificDate(timeslot.specificDate)
+          : formatDayOfWeek(timeslot.dayOfWeek) + 's' }}
+          {{ formatTime(timeslot.startTime) }} - {{ formatTime(timeslot.endTime) }}
+        </p>
+
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="description-card" appearance="outlined">
+      <mat-card-content>
+        <p>Price: {{activity?.price}}€ per timeslot</p>
+        <p class="no-period">No booking period selected.</p>
+      </mat-card-content>
+      <mat-card-actions *ngIf="authService.isLoggedIn() && authService.getUserRole() === USER_ROLES.ADMIN">
+        <button mat-raised-button color="primary" class="button" (click)="goBack()">
+          Return
+        </button>
+      </mat-card-actions>
+      <mat-card-actions *ngIf="authService.isLoggedIn() && authService.getUserRole() === USER_ROLES.GUEST">
+        <button mat-raised-button color="warn" class="button" (click)="goBack()">
+          Cancel
+        </button>
+        <button mat-raised-button color="primary" class="button" (click)="goToTimeslots()">
+          Book
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>
